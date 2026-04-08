@@ -1,0 +1,33 @@
+baseURL = 'https://patglanz.github.io/tech-blog/'
+languageCode = 'de-de'
+title = 'Patricks Tech Blog'
+theme = 'PaperMod'
+
+# Wichtig für GitHub Pages Unterordner
+canonifyURLs = true
+
+[params]
+    env = 'production'
+    title = 'Patricks Tech Blog'
+    description = 'Hardware, Home Assistant und technische Basteleien'
+    author = 'Patrick'
+    
+    # Design-Optionen
+    defaultTheme = 'auto'
+    showCodeCopyButtons = true # Perfekt für deine YAML-Codes
+    
+    # Profil-Sektion auf der Startseite (optional, sieht aber gut aus)
+    [params.profileMode]
+        enabled = true
+        title = "Moin, ich bin Patrick"
+        subtitle = "Hier blogge ich über Smarthome-Projekte wie meinen Impulswasserzähler."
+
+[menu]
+    [[menu.main]]
+        name = "Posts"
+        url = "posts/"
+        weight = 10
+    [[menu.main]]
+        name = "GitHub"
+        url = "https://github.com/patglanz/tech-blog"
+        weight = 20
