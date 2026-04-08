@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/tech-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=tech-blog/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Hauswasserverbrauch messen mit Home Assistant | Patricks Tech Blog</title>
+<meta name="keywords" content="Home Assistant, Shelly, IoT, Tutorial">
+<meta name="description" content="Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.">
+<meta name="author" content="Patrick">
+<link rel="canonical" href="http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/">
+<link crossorigin="anonymous" href="http://localhost:1313/tech-blog/assets/css/stylesheet.199042e659bc7245f5609d333d6c044eb554a0640849bb874e1dff8eb0f57209.css" integrity="sha256-GZBC5lm8ckX1YJ0zPWwETrVUoGQISbuHTh3/jrD1cgk=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/tech-blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/tech-blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/tech-blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/tech-blog/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/tech-blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/">
+  <meta property="og:site_name" content="Patricks Tech Blog">
+  <meta property="og:title" content="Hauswasserverbrauch messen mit Home Assistant">
+  <meta property="og:description" content="Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.">
+  <meta property="og:locale" content="de_de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-08T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-04-08T00:00:00+00:00">
+    <meta property="article:tag" content="Home Assistant">
+    <meta property="article:tag" content="Shelly">
+    <meta property="article:tag" content="IoT">
+    <meta property="article:tag" content="Tutorial">
+    <meta property="og:image" content="http://localhost:1313/tech-blog/images/wasserzaehler.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://localhost:1313/tech-blog/images/wasserzaehler.jpg">
+  <meta name="twitter:title" content="Hauswasserverbrauch messen mit Home Assistant">
+  <meta name="twitter:description" content="Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://localhost:1313/tech-blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Hauswasserverbrauch messen mit Home Assistant",
+      "item": "http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Hauswasserverbrauch messen mit Home Assistant",
+  "name": "Hauswasserverbrauch messen mit Home Assistant",
+  "description": "Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.",
+  "keywords": [
+    "Home Assistant", "Shelly", "IoT", "Tutorial"
+  ],
+  "articleBody": "Die erste Etappe: AI on the edge (Der Fehlversuch) Unseren Hauswasserverbrauch präzise zu messen, vor Leckagen gewarnt zu werden und generell einen besseren Überblick über den Frischwasserkonsum in unserem Haushalt zu erhalten, war schon seit längerem eines meiner Integrationsziele für meine Home Assistant-Instanz.\nDas Thema “AI on the edge”, eine Kameraauswertung des analogen Wasserzählers mit hilfe eines recht günstigen Setups, bestehend aus einem ESP32-Kameramodul ESP32-CAM (https://www.berrybase.de/berrybase-esp32-cam-dev-board-ov2640-kamera-usb-zu-seriell-modul-wifi-bt-usb) und ein paar 3d-gedruckten Komponenten, war preislich recht verlockend (10 Euro plus versand für das ESP-Kamera-Modul sind echt ein Schnapper). Die Setup-Dokumentation ist auch recht gut: https://www.home-assistant.io/docs/energy/water/ und https://github.com/jomjol/AI-on-the-edge-device und genügend 3D-Modelle, um das Ganze auf eine analoge Wasseruhr draufzubasteln gibt es auch, z.B. hier: https://makerworld.com/en/search/models?keyword=AI+on+the+edge\nMein Scheitern auf der ersten Etappe Was ich nicht wusste: Das ESP32-CAM-Modul mit dem On Board-Wifimodul verlangt ohne externe Antenne einen 2.4 Ghz-Access Point in einem Radius von geschätzt 5-6 Metern. Du brauchst also zwingend eine externe Antenne, z.B. die hier: https://www.amazon.de/dp/B0CJY47TTJ Ansonsten bleibt die WiFi-Verbindung zu Deiner “AI on the edge”-Instanz dunkel. Auch mit der externen Antenne musste ich, um eine stabile Verbindung zum “AI on the Edge”-Setup zu erreichen, einen zusätzlichen WiFi-Access-Point im Keller installieren.\nBei den ESP32-CAMs gibt es wohl auch Qualitätsunterschiede, insbesondere beim Objektiv. Ich habe an meinem Setup stundenlang herumjustiert (Brennweite, Beleuchtung), leider ohne Erfolg. Nur der Rollenzähler wurde abgelesen, somit hatte ich bei meiner amtlichen Wasseruhr nur eine Genauigkeit von 1000 Litern.\nMein erster Prototyp sah so aus: der erste Wurf Plan B: Ein zweiter Wasserzähler Die Idee: Einen Impulswasserzähler einzusetzen. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird. Ich habe mir dann einen “Diehl AQUARIUS P mit Impulsausgang (Reedschalter), Kabellänge 2 m, Kontaktbelastung 24 V ~ 0.2 A” zugelegt. Die Idee: Die Impulse am Kabel des Wasserzählers mit einem Shelly 1 Gen4-Modul zu zählen. (Den Einbau eines solchen Zählers in die Hauptwasserleitung sollte man unbedingt vom Fachmann vornehmen lassen.) der Impulszähler Das Shelly 1-Modul Wasserverbrauch mit Impulszähler, Shelly 1 und Home Assistant erfassen Nachdem der Wasserzähler vom Fachmann eingebaut wurde😉, kann die Verkabelung mit dem Shelly wie folgt angelegt werden: Wiring Das Netzteil ist hier etwas übertrieben dargestellt. Ein einfaches Steckernetzteil mit 12V/1A reicht vollkommen aus.\n⚠️ ACHTUNG: SICHERHEITSHINWEIS AUF KEINEN FALL DEN SHELLY IN DIESEM SETUP MIT 220V BETREIBEN! Die Klemme SW (Switch) am Shelly hat keine galvanische Trennung zur Stromversorgung. Wenn der Shelly an 230V angeschlossen ist, liegt auf dem dünnen Kabel, das von der SW-Klemme zum Wasserzähler führt, die volle Netzspannung an und wird den Reedkontakt zerstören!! Zur Stromversorgung des Shelly Moduls in diesem Setup immer nur ein 12V Steckernetzteil benutzen.\nDer eingebaute Zähler inklusive Shelly 1 Gen4 im im 3-D-Gedrucktem Gehäuse sieht bei mir so aus: der Impulszähler, mit Shelly-Modul Das weiße Gehäuse über dem oberen Absperrschieber ist ein 3D-gedrucktes Gehäuse für das Shelly-Modul. Das schützt das Shelly 1 vor Feuchtigkeit und kann hier downgeloadet werden: https://makerworld.com/en/models/470912-shelly-1-plus-wallmount\nWichtig: Nach Einbindung des Shelly 1 in das Netzwerk sollte der Schalterport auf “detached” gestellt werden, um ein Mitlaufen des Relais zu verhindern, wenn der Zähler einen Impuls sendet: Shelly 1 Web Interface Den Shelly in Home Assistant einbinden: https://www.home-assistant.io/integrations/shelly/\nHome Assistant: Die Impulse zählen Nachdem der Shelly in Home Assistant eingebunden wurde, hat man nun eine Entität für den Shelly (meist ein Schalter oder Binärsensor), der bei jedem Impuls kurz von Aus auf An springt.\nUm diese Impulse zu sammeln, legt man einen Zähler an:\nMan geht in Home Assistant auf Einstellungen -\u003e Geräte \u0026 Dienste -\u003e Helfer.\nUnten rechts auf Helfer erstellen gehen und Zähler wählen (Counter).\nZ.B. Wasser Impulse (der Startwert ist 0) nennen und auf Erstellen klicken.\nNun zu Einstellungen -\u003e Automatisierungen gehen und eine neue Automatisierung erstellen:\nAuslöser (Trigger): Zustand. Entität ist der Shelly-Schalter/Eingang. Von Aus (off) zu An (on).\nIn meinem Fall habe ich den Shelly 1 “watermeter” genannt. Entsprechend hieß der sensor/Schalter es Shelly “binary_sensor.watermeter_input_0”\nAktion: Dienst ausführen.\\ Zähler: Erhöhen (counter.increment) wählen und den neuen Zähler “Wasser Impulse” als Ziel auswählen.\\ Automatisierung speichern. Jetzt zählt Home Assistant jeden Impuls (1, 2, 3…) hoch.\nhier der YAML-Code meiner Automatisierung, um mit dem “Puls” des Shelly-Binärsensors den Zähler (Die Helpervariable) hochzusetzen (binary_sensor.watermeter_input_0 ist der Sensor des Shellys, counter.water_pulse ist die Helper-Variable.)\nalias: \"Water consuption: Count the pulse\" description: Increases the helper counter for every pulse received. triggers: - entity_id: binary_sensor.watermeter_input_0 from: \"off\" to: \"on\" trigger: state actions: - action: counter.increment target: entity_id: counter.water_pulse mode: single Mit diesem Setup hat man nun einen für alle Ewigkeit kumulierenden Zähler, der jedesmal, wenn die Wasseruhr einen “Puls” an den Shelly sendet, “1” weiterzählt.\nIn einem nächsten Schritt wird eine weitere Helfervariable angelegt, die einen “Puls” als 10 Liter darstellt und zählt. Hierzu müssen die Daten des im vorherigen Schrittes angelegten Pulszählers in einer neu angelegten Helfervariable umgerechnet werden:\nGehe in Home Assistant in der linken Seitenleiste auf: Einstellungen -\u003e Geräte \u0026 Dienste: Reiter Helfer.\nKlicke unten rechts auf Helfer erstellen.\nWähle in der Liste Template und danach Template für einen Sensor erstellen aus.\nFülle die Felder in dem neuen Fenster exakt so aus:\nName: Wasserverbrauch Gesamt (oder ein Name deiner Wahl)\nZustandstemplate: Kopiere den folgenden Code genau so hinein:\nCode-Snippet {{ states('counter.water_pulse') | float(0) * 10 }}\nMaßeinheit: L (Wichtig: Großes L für Liter)\nGeräteklasse: Water (Wasser)\nZustandsklasse: Total increasing (Total zunehmend) Template für den Sensor Klicke auf Absenden.\nDamit ist die Umrechnung fertig! Home Assistant erstellt nun automatisch die Entität sensor.wasserverbrauch_gesamt.\nDieser Sensor nimmt ab sofort die reine Impuls-Zahl aus deinem Counter (counter.water_pulse), rechnet immer sofort eine Null hinten dran (mal 10) und meldet dem System das Ergebnis als echte Liter. Genau diesen neuen Sensor kannst du jetzt im Energie-Dashboard unter “Wasserverbrauch” eintragen.\n",
+  "wordCount" : "942",
+  "inLanguage": "en",
+  "image":"http://localhost:1313/tech-blog/images/wasserzaehler.jpg","datePublished": "2026-04-08T00:00:00Z",
+  "dateModified": "2026-04-08T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Patrick"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Patricks Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/tech-blog/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/tech-blog/" accesskey="h" title="Patricks Tech Blog (Alt + H)">Patricks Tech Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/tech-blog/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/patglanz/tech-blog" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Hauswasserverbrauch messen mit Home Assistant
+    </h1>
+    <div class="post-meta"><span title='2026-04-08 00:00:00 +0000 UTC'>April 8, 2026</span>&nbsp;·&nbsp;<span>Patrick</span>
+
+</div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="eager" src="http://localhost:1313/tech-blog/images/wasserzaehler.jpg" alt="Impulswasserzähler mit Shelly 1 Gen4">
+        <figcaption>Wasserverbrauch zuverlässig messen</figcaption>
+</figure>
+  <div class="post-content"><h2 id="die-erste-etappe-ai-on-the-edge-der-fehlversuch">Die erste Etappe: AI on the edge (Der Fehlversuch)<a hidden class="anchor" aria-hidden="true" href="#die-erste-etappe-ai-on-the-edge-der-fehlversuch">#</a></h2>
+<p>Unseren Hauswasserverbrauch präzise zu messen, vor Leckagen gewarnt zu werden und generell einen besseren Überblick über den Frischwasserkonsum in unserem Haushalt zu erhalten, war schon seit längerem eines meiner Integrationsziele für meine Home Assistant-Instanz.</p>
+<p>Das Thema “AI on the edge”, eine Kameraauswertung des analogen Wasserzählers mit hilfe eines recht günstigen Setups, bestehend aus einem ESP32-Kameramodul ESP32-CAM (<a href="https://www.berrybase.de/berrybase-esp32-cam-dev-board-ov2640-kamera-usb-zu-seriell-modul-wifi-bt-usb">https://www.berrybase.de/berrybase-esp32-cam-dev-board-ov2640-kamera-usb-zu-seriell-modul-wifi-bt-usb</a>)  und ein paar 3d-gedruckten Komponenten, war preislich recht verlockend (10 Euro plus versand für das ESP-Kamera-Modul sind echt ein Schnapper).
+Die Setup-Dokumentation ist auch recht gut: <a href="https://www.home-assistant.io/docs/energy/water/">https://www.home-assistant.io/docs/energy/water/</a> und <a href="https://github.com/jomjol/AI-on-the-edge-device">https://github.com/jomjol/AI-on-the-edge-device</a> und genügend 3D-Modelle, um das Ganze auf eine analoge Wasseruhr draufzubasteln gibt es auch, z.B. hier:
+<a href="https://makerworld.com/en/search/models?keyword=AI+on+the+edge">https://makerworld.com/en/search/models?keyword=AI+on+the+edge</a></p>
+<h2 id="mein-scheitern-auf-der-ersten-etappe">Mein Scheitern auf der ersten Etappe<a hidden class="anchor" aria-hidden="true" href="#mein-scheitern-auf-der-ersten-etappe">#</a></h2>
+<p>Was ich nicht wusste: Das ESP32-CAM-Modul mit dem On Board-Wifimodul verlangt ohne externe Antenne einen 2.4 Ghz-Access Point in einem Radius von geschätzt 5-6 Metern. Du brauchst also zwingend eine externe Antenne, z.B. die hier: <a href="https://www.amazon.de/dp/B0CJY47TTJ">https://www.amazon.de/dp/B0CJY47TTJ</a> Ansonsten bleibt die WiFi-Verbindung zu Deiner “AI on the edge”-Instanz dunkel.
+Auch mit der externen Antenne musste ich, um eine stabile Verbindung zum “AI on the Edge”-Setup zu erreichen, einen zusätzlichen WiFi-Access-Point im Keller installieren.</p>
+<p>Bei den ESP32-CAMs gibt es wohl auch Qualitätsunterschiede, insbesondere beim Objektiv. Ich habe an meinem Setup stundenlang herumjustiert (Brennweite, Beleuchtung), leider ohne Erfolg. Nur der Rollenzähler wurde abgelesen, somit hatte ich bei meiner amtlichen Wasseruhr nur eine Genauigkeit von 1000 Litern.</p>
+<p>Mein erster Prototyp sah so aus:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/espprototype.jpg" width="300px"/> <figcaption>
+            der erste Wurf
+        </figcaption>
+</figure>
+</p>
+<h2 id="plan-b-ein-zweiter-wasserzähler">Plan B: Ein zweiter Wasserzähler<a hidden class="anchor" aria-hidden="true" href="#plan-b-ein-zweiter-wasserzähler">#</a></h2>
+<p>Die Idee: Einen Impulswasserzähler einzusetzen. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird.
+Ich habe mir dann einen “Diehl AQUARIUS P mit Impulsausgang (Reedschalter), Kabellänge 2 m, Kontaktbelastung 24 V ~ 0.2 A” zugelegt. Die Idee: Die Impulse am Kabel des Wasserzählers mit einem Shelly 1 Gen4-Modul zu zählen.
+(Den Einbau eines solchen Zählers in die Hauptwasserleitung sollte man unbedingt vom Fachmann vornehmen lassen.)
+<figure>
+        <img loading="lazy" src="http://localhost:1313/tech-blog/images/aquariusp.jpg" width="200px"/> <figcaption>
+                der Impulszähler
+            </figcaption>
+    </figure>
+
+<figure>
+        <img loading="lazy" src="http://localhost:1313/tech-blog/images/shelly1gen4.jpg" width="200px"/> <figcaption>
+                Das Shelly 1-Modul
+            </figcaption>
+    </figure>
+</p>
+<h2 id="wasserverbrauch-mit-impulszähler-shelly-1-und-home-assistant-erfassen">Wasserverbrauch mit Impulszähler, Shelly 1 und Home Assistant erfassen<a hidden class="anchor" aria-hidden="true" href="#wasserverbrauch-mit-impulszähler-shelly-1-und-home-assistant-erfassen">#</a></h2>
+<p>Nachdem der Wasserzähler vom Fachmann eingebaut wurde😉, kann die Verkabelung mit dem Shelly wie folgt angelegt werden:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/blueprint.jpg" width="300px"/> <figcaption>
+            Wiring
+        </figcaption>
+</figure>
+</p>
+<p>Das Netzteil ist hier etwas übertrieben dargestellt. Ein einfaches Steckernetzteil mit 12V/1A reicht vollkommen aus.</p>
+<h3 id="-achtung-sicherheitshinweis">⚠️ ACHTUNG: SICHERHEITSHINWEIS<a hidden class="anchor" aria-hidden="true" href="#-achtung-sicherheitshinweis">#</a></h3>
+<p>AUF KEINEN FALL DEN SHELLY IN DIESEM SETUP MIT 220V BETREIBEN! Die Klemme SW (Switch) am Shelly hat keine galvanische Trennung zur Stromversorgung. Wenn der Shelly an 230V angeschlossen ist, liegt auf dem dünnen Kabel, das von der SW-Klemme zum Wasserzähler führt, die volle Netzspannung an und wird den Reedkontakt zerstören!! Zur Stromversorgung des Shelly Moduls in diesem Setup immer nur ein 12V Steckernetzteil benutzen.</p>
+<p>Der eingebaute Zähler inklusive Shelly 1 Gen4 im im 3-D-Gedrucktem Gehäuse sieht bei mir so aus:
+<figure>
+        <img loading="lazy" src="http://localhost:1313/tech-blog/images/insitu.jpg" width="400px"/> <figcaption>
+                der Impulszähler, mit Shelly-Modul
+            </figcaption>
+    </figure>
+
+Das weiße Gehäuse über dem oberen Absperrschieber ist ein 3D-gedrucktes Gehäuse für das Shelly-Modul. Das schützt das Shelly 1 vor Feuchtigkeit und kann hier downgeloadet werden: <a href="https://makerworld.com/en/models/470912-shelly-1-plus-wallmount">https://makerworld.com/en/models/470912-shelly-1-plus-wallmount</a></p>
+<p>Wichtig: Nach Einbindung des Shelly 1 in das Netzwerk sollte der Schalterport auf “detached” gestellt werden, um ein Mitlaufen des Relais zu verhindern, wenn der Zähler einen Impuls sendet:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/shellywebui.jpg" width="600px"/> <figcaption>
+            Shelly 1 Web Interface
+        </figcaption>
+</figure>
+</p>
+<p>Den Shelly in Home Assistant einbinden: <a href="https://www.home-assistant.io/integrations/shelly/">https://www.home-assistant.io/integrations/shelly/</a></p>
+<h2 id="home-assistant-die-impulse-zählen">Home Assistant: Die Impulse zählen<a hidden class="anchor" aria-hidden="true" href="#home-assistant-die-impulse-zählen">#</a></h2>
+<p>Nachdem der Shelly in Home Assistant eingebunden wurde, hat man nun eine Entität für den Shelly (meist ein Schalter oder Binärsensor), der bei jedem Impuls kurz von Aus auf An springt.<br>
+Um diese Impulse zu sammeln, legt man einen Zähler an:<br>
+Man geht  in Home Assistant auf Einstellungen -&gt; Geräte &amp; Dienste -&gt; Helfer.<br>
+Unten rechts auf Helfer erstellen gehen und Zähler wählen (Counter).<br>
+Z.B. Wasser Impulse (der Startwert ist 0) nennen und auf Erstellen klicken.<br>
+Nun zu Einstellungen -&gt; Automatisierungen gehen und eine neue Automatisierung erstellen:<br>
+Auslöser (Trigger): Zustand. Entität ist der Shelly-Schalter/Eingang. Von Aus (off) zu An (on).<br>
+In meinem Fall habe ich den Shelly 1 “watermeter” genannt. Entsprechend hieß der sensor/Schalter es Shelly  “binary_sensor.watermeter_input_0”<br>
+Aktion: Dienst ausführen.\ Zähler: Erhöhen (counter.increment) wählen und den neuen Zähler &ldquo;Wasser Impulse&rdquo; als Ziel auswählen.\ Automatisierung speichern. Jetzt zählt Home Assistant jeden Impuls (1, 2, 3&hellip;) hoch.</p>
+<p>hier der YAML-Code meiner Automatisierung, um mit dem “Puls” des Shelly-Binärsensors den Zähler (Die Helpervariable) hochzusetzen (binary_sensor.watermeter_input_0 ist der Sensor des Shellys, counter.water_pulse ist die Helper-Variable.)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">alias</span>: <span style="color:#e6db74">&#34;Water consuption: Count the pulse&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">description</span>: <span style="color:#ae81ff">Increases the helper counter for every pulse received.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">triggers</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">entity_id</span>: <span style="color:#ae81ff">binary_sensor.watermeter_input_0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">from</span>: <span style="color:#e6db74">&#34;off&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">to</span>: <span style="color:#e6db74">&#34;on&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">trigger</span>: <span style="color:#ae81ff">state</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">actions</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">action</span>: <span style="color:#ae81ff">counter.increment</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">target</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">entity_id</span>: <span style="color:#ae81ff">counter.water_pulse</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">mode</span>: <span style="color:#ae81ff">single</span>
+</span></span></code></pre></div><p>Mit diesem Setup hat man nun einen für alle Ewigkeit kumulierenden Zähler, der jedesmal, wenn die Wasseruhr einen “Puls” an den Shelly sendet, “1” weiterzählt.<br>
+In einem nächsten Schritt wird eine weitere Helfervariable angelegt, die einen “Puls” als 10 Liter darstellt und zählt. Hierzu müssen die Daten des im vorherigen Schrittes angelegten Pulszählers in einer neu angelegten Helfervariable umgerechnet werden:<br>
+Gehe in Home Assistant in der linken Seitenleiste auf: <strong>Einstellungen -&gt; Geräte &amp; Dienste: Reiter Helfer</strong>.<br>
+Klicke unten rechts auf Helfer erstellen.<br>
+Wähle in der Liste Template und danach Template für einen Sensor erstellen aus.<br>
+Fülle die Felder in dem neuen Fenster exakt so aus:<br>
+Name: Wasserverbrauch Gesamt (oder ein Name deiner Wahl)<br>
+Zustandstemplate: Kopiere den folgenden Code genau so hinein:<br>
+Code-Snippet
+<code>{{ states('counter.water_pulse') | float(0) * 10 }}</code></p>
+<p>Maßeinheit: L (Wichtig: Großes L für Liter)<br>
+Geräteklasse: Water (Wasser)<br>
+Zustandsklasse: Total increasing (Total zunehmend)
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/templatesensor.jpg" width="500px"/> <figcaption>
+            Template für den Sensor
+        </figcaption>
+</figure>
+</p>
+<p>Klicke auf Absenden.<br>
+Damit ist die Umrechnung fertig! Home Assistant erstellt nun automatisch die Entität sensor.wasserverbrauch_gesamt.<br>
+Dieser Sensor nimmt ab sofort die reine Impuls-Zahl aus deinem Counter (counter.water_pulse), rechnet immer sofort eine Null hinten dran (mal 10) und meldet dem System das Ergebnis als echte Liter. Genau diesen neuen Sensor kannst du jetzt im Energie-Dashboard unter &ldquo;Wasserverbrauch&rdquo; eintragen.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tech-blog/tags/home-assistant/">Home Assistant</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/shelly/">Shelly</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/iot/">IoT</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/tutorial/">Tutorial</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/tech-blog/">Patricks Tech Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
