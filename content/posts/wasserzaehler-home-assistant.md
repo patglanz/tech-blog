@@ -99,5 +99,5 @@ Zustandsklasse: Total increasing (Total zunehmend)
 Klicke auf Absenden.\
 Damit ist die Umrechnung fertig! Home Assistant erstellt nun automatisch die Entität sensor.wasserverbrauch_gesamt.\
 Dieser Sensor nimmt ab sofort die reine Impuls-Zahl aus deinem Counter (counter.water_pulse), rechnet immer sofort eine Null hinten dran (mal 10) und meldet dem System das Ergebnis als echte Liter. Genau diesen neuen Sensor kannst du jetzt im Energie-Dashboard unter "Wasserverbrauch" eintragen. Dann solltest Du in kürzester Zeit auch schon Deinen Wasserverbrauch im Energiedashboard sehen:
-{{<figure src="/images/templatesensor.jpg" width="500px" title="Template für den Sensor">}}
+{{<figure src="/images/waterconsumption.jpg" width="500px" title="Wasserverbrauch im Energiedashboard">}}
 
