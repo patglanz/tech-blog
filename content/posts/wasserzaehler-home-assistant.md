@@ -29,7 +29,7 @@ Mein erster Prototyp sah so aus:
 An der Stelle habe ich beschlossen, das Projekt “AI on the edge” mit der ESP32-CAM zu beenden. Das war zu viel Aufwand und zu wenig Ergebnis für mich, leider.
 
 ## Plan B: Ein zweiter Wasserzähler
-Die Idee: Einen Impulswasserzähler einzusetzen. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird.
+Die Idee: Einen zusätzlichen Impulswasserzähler einzusetzen, und zwar hinter der "amtlichen" Wasseruhr. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird.
 Ich habe mir dann einen “Diehl AQUARIUS P mit Impulsausgang (Reedschalter), Kabellänge 2 m, Kontaktbelastung 24 V ~ 0.2 A” zugelegt. Die Idee: Die Impulse am Kabel des Wasserzählers mit einem Shelly 1 Gen4-Modul zu zählen. 
 (Den Einbau eines solchen Zählers in die Hauptwasserleitung sollte man unbedingt vom Fachmann vornehmen lassen.)
     {{< figure src="/images/aquariusp.jpg" width="200px" title="der Impulszähler" >}}
