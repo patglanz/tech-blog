@@ -26,6 +26,7 @@ Bei den ESP32-CAMs gibt es wohl auch Qualitätsunterschiede, insbesondere beim O
 
 Mein erster Prototyp sah so aus:
 {{<figure src="/images/espprototype.jpg" width="300px" title="der erste Wurf">}}
+An der Stelle habe ich beschlossen, das Projekt “AI on the edge” mit der ESP32-CAM zu beenden. Das war zu viel Aufwand und zu wenig Ergebnis für mich, leider.
 
 ## Plan B: Ein zweiter Wasserzähler
 Die Idee: Einen Impulswasserzähler einzusetzen. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird.
