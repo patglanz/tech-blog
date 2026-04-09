@@ -43,7 +43,7 @@ Das Netzteil ist hier etwas übertrieben dargestellt. Ein einfaches Steckernetzt
 AUF KEINEN FALL DEN SHELLY IN DIESEM SETUP MIT 220V BETREIBEN! Die Klemme SW (Switch) am Shelly hat keine galvanische Trennung zur Stromversorgung. Wenn der Shelly an 230V angeschlossen ist, liegt auf dem dünnen Kabel, das von der SW-Klemme zum Wasserzähler führt, die volle Netzspannung an und wird den Reedkontakt zerstören!! Zur Stromversorgung des Shelly Moduls in diesem Setup immer nur ein 12V Steckernetzteil benutzen.
 
 Der eingebaute Zähler inklusive Shelly 1 Gen4 im im 3-D-Gedrucktem Gehäuse sieht bei mir so aus:
-    {{< figure src="/images/insitu.jpg" width="400px" title="der Impulszähler, mit Shelly-Modul" >}}
+    {{< figure src="/images/insitu.jpg" width="700px" title="der Impulszähler, mit Shelly-Modul" >}}
 Das weiße Gehäuse über dem oberen Absperrschieber ist ein 3D-gedrucktes Gehäuse für das Shelly-Modul. Das schützt das Shelly 1 vor Feuchtigkeit und kann hier downgeloadet werden: https://makerworld.com/en/models/470912-shelly-1-plus-wallmount
 
 Wichtig: Nach Einbindung des Shelly 1 in das Netzwerk sollte der Schalterport auf “detached” gestellt werden, um ein Mitlaufen des Relais zu verhindern, wenn der Zähler einen Impuls sendet:
