@@ -17,6 +17,8 @@ enabled = true
 title = "Gude, ich bin Pat."
 subtitle = "Vom Graben in die Cloud – meine Smarthome- und DevOps-Abenteuer."
 imageUrl = "images/loch.jpg"
+imageWidth = 250  # Hier kannst du mit der Größe spielen (Standard ist 120)
+imageHeight = 250 # Am besten den gleichen Wert nehmen, damit es rund bleibt
 imageCover = true
 imageTitle = "Vom Graben zum Smart Home"
 
