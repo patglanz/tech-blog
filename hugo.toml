@@ -30,6 +30,14 @@ url = "posts/wasserzaehler-home-assistant"
 name = "GitHub"
 url = "https://github.com/patglanz"
 
+[[params.socialIcons]]
+        name = "linkedin"
+        url = "https://www.linkedin.com/in/patrick-glanz-829566b/"
+
+    [[params.socialIcons]]
+        name = "x" # Falls das Theme die neueste Version hat. Wenn kein Logo erscheint, nutze stattdessen "twitter"
+        url = "https://x.com/GlanzPat"
+
 [menu]
 [[menu.main]]
 name = "Posts"
