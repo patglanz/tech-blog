@@ -1,6 +1,6 @@
 baseURL = 'https://patglanz.github.io/tech-blog/'
 languageCode = 'de-de'
-title = 'Patricks Tech Blog'
+title = 'Pats Tech Blog'
 theme = 'PaperMod'
 
 # Wichtig für GitHub Pages Unterordner
