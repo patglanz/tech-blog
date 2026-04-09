@@ -1,5 +1,5 @@
 ---
-title: "Hauswasserverbrauch messen mit Home Assistant"
+title: "Hauswasserverbrauch zuverlässig messen mit Home Assistant"
 date: 2026-04-08
 draft: false
 tags: ["Home Assistant", "Shelly", "IoT", "Tutorial"]
