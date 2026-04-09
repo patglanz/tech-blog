@@ -1,4 +1,3 @@
-cat << 'EOF' > hugo.toml
 baseURL = "https://patglanz.github.io/tech-blog/"
 languageCode = "de-de"
 title = "Pats Tech Blog"
