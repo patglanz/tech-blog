@@ -60,7 +60,7 @@ Unten rechts auf Helfer erstellen gehen und Zähler wählen (Counter).\
  Z.B. Wasser Impulse (der Startwert ist 0) nennen und auf Erstellen klicken.\
 Nun zu Einstellungen -> Automatisierungen gehen und eine neue Automatisierung erstellen:\
 Auslöser (Trigger): Zustand. Entität ist der Shelly-Schalter/Eingang. Von Aus (off) zu An (on).\
- In meinem Fall habe ich den Shelly 1 “watermeter” genannt. Entsprechend hieß der sensor/Schalter es Shelly  “binary_sensor.watermeter_input_0”\
+ In meinem Fall habe ich den Shelly 1 “watermeter” genannt. Entsprechend hieß der sensor/Schalter des Shelly:  “binary_sensor.watermeter_input_0”\
 Aktion: Dienst ausführen.\ Zähler: Erhöhen (counter.increment) wählen und den neuen Zähler "Wasser Impulse" als Ziel auswählen.\ Automatisierung speichern. Jetzt zählt Home Assistant jeden Impuls (1, 2, 3...) hoch.
 
 hier der YAML-Code meiner Automatisierung, um mit dem “Puls” des Shelly-Binärsensors den Zähler (Die Helpervariable) hochzusetzen (binary_sensor.watermeter_input_0 ist der Sensor des Shellys, counter.water_pulse ist die Helper-Variable.)
