@@ -8,7 +8,7 @@ canonifyURLs = true
 
 [params]
     env = 'production'
-    title = 'Patricks Tech Blog'
+    title = 'Pats Tech Blog'
     description = 'Hardware, Home Assistant und technische Basteleien'
     author = 'Patrick'
     
@@ -19,7 +19,7 @@ canonifyURLs = true
     # Profil-Sektion auf der Startseite (optional, sieht aber gut aus)
     [params.profileMode]
         enabled = true
-        title = "Moin, ich bin Patrick"
+        title = "Gude, ich bin Pat"
         subtitle = "Hier blogge ich über Smarthome-Projekte wie meinen Impulswasserzähler."
 
 [menu]
