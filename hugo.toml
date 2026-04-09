@@ -35,3 +35,22 @@ canonifyURLs = true
         name = "Impressum"
         url = "impressum"
         weight = 30    # Höhere Zahl = weiter rechts im Menü
+[params.profileMode]
+    enabled = true
+    title = "Gude, ich bin Pat."
+    # Der neue, raffinierte Untertitel:
+    subtitle = "Vom Graben bis zur Cloud – meine Smarthome- und DevOps-Abenteuer."
+
+    # --- DAS IST DER CLOU ---
+    # Wir machen das Loch-Bild zum Hintergrund-Cover der gesamten Sektion.
+    imageUrl = "images/loch.jpg"
+    imageCover = true       # WICHTIG: Macht das Bild zum Hintergrund
+    imageTitle = "Vom Graben zum Smart Home"
+
+    [[params.profileMode.buttons]]
+        name = "Zum Wasserzähler-Projekt"
+        url = "posts/wasserzaehler-home-assistant"
+
+    [[params.profileMode.buttons]]
+        name = "GitHub"
+        url = "https://github.com/patglanz"
