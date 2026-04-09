@@ -2,55 +2,44 @@ baseURL = 'https://patglanz.github.io/tech-blog/'
 languageCode = 'de-de'
 title = 'Pats Tech Blog'
 theme = 'PaperMod'
-
-# Wichtig für GitHub Pages Unterordner
 canonifyURLs = true
 
 [params]
-    env = 'production'
-    title = 'Pats Tech Blog'
-    description = 'Hardware, Home Assistant und technische Basteleien'
-    author = 'Patrick'
-    
-    # Design-Optionen
-    defaultTheme = 'auto'
-    showCodeCopyButtons = true # Perfekt für deine YAML-Codes
-    
-    # Profil-Sektion auf der Startseite (optional, sieht aber gut aus)
-    [params.profileMode]
-        enabled = true
-        title = "Gude, ich bin Pat"
-        subtitle = "Hier blogge ich über Smarthome&Tech-Projekte"
+env = 'production'
+title = 'Pats Tech Blog'
+description = 'Hardware, Home Assistant und technische Basteleien'
+author = 'Patrick'
+defaultTheme = 'auto'
+showCodeCopyButtons = true
+
+[params.profileMode]
+enabled = true
+title = "Gude, ich bin Pat."
+subtitle = "Vom Graben bis zur Cloud – meine Smarthome- und DevOps-Abenteuer."
+imageUrl = "images/loch.jpg"
+imageCover = true
+imageTitle = "Vom Graben zum Smart Home"
+
+[[params.profileMode.buttons]]
+name = "Zum Wasserzähler-Projekt"
+url = "posts/wasserzaehler-home-assistant"
+
+[[params.profileMode.buttons]]
+name = "GitHub"
+url = "https://github.com/patglanz"
 
 [menu]
-    [[menu.main]]
-        name = "Posts"
-        url = "posts/"
-        weight = 10
-    [[menu.main]]
-        name = "GitHub"
-        url = "https://github.com/patglanz/tech-blog"
-        weight = 20
-    [[menu.main]]
-        name = "Impressum"
-        url = "impressum"
-        weight = 30    # Höhere Zahl = weiter rechts im Menü
-[params.profileMode]
-    enabled = true
-    title = "Gude, ich bin Pat."
-    # Der neue, raffinierte Untertitel:
-    subtitle = "Vom Graben bis zur Cloud – meine Smarthome- und DevOps-Abenteuer."
+[[menu.main]]
+name = "Posts"
+url = "posts/"
+weight = 10
 
-    # --- DAS IST DER CLOU ---
-    # Wir machen das Loch-Bild zum Hintergrund-Cover der gesamten Sektion.
-    imageUrl = "images/loch.jpg"
-    imageCover = true       # WICHTIG: Macht das Bild zum Hintergrund
-    imageTitle = "Vom Graben zum Smart Home"
+[[menu.main]]
+name = "GitHub"
+url = "https://github.com/patglanz/tech-blog"
+weight = 20
 
-    [[params.profileMode.buttons]]
-        name = "Zum Wasserzähler-Projekt"
-        url = "posts/wasserzaehler-home-assistant"
-
-    [[params.profileMode.buttons]]
-        name = "GitHub"
-        url = "https://github.com/patglanz"
+[[menu.main]]
+name = "Impressum"
+url = "impressum"
+weight = 30
