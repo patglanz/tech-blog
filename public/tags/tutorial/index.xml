@@ -9,7 +9,7 @@
     <lastBuildDate>Wed, 08 Apr 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tech-blog/tags/tutorial/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Hauswasserverbrauch messen mit Home Assistant</title>
+      <title>Hauswasserverbrauch zuverlässig erfassen mit Home Assistant</title>
       <link>http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/</link>
       <pubDate>Wed, 08 Apr 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/</guid>

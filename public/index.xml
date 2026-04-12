@@ -6,14 +6,31 @@
     <description>Recent content on Pats Tech Blog</description>
     <generator>Hugo</generator>
     <language>de-de</language>
-    <lastBuildDate>Wed, 08 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Apr 2026 19:00:00 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/tech-blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Hauswasserverbrauch messen mit Home Assistant</title>
+      <title>Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden</title>
+      <link>http://localhost:1313/tech-blog/posts/bosch-waermepumpe-home-assistant/</link>
+      <pubDate>Sun, 12 Apr 2026 19:00:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/posts/bosch-waermepumpe-home-assistant/</guid>
+      <description>&lt;p&gt;Seit kurzem bin ich Besitzer einer Warmwasserwärmepumpe Bosch Compress 5000 DW, die mir von einem SHK-Fachbetrieb an unseren Brauchwasserkreislauf in unserem Haus angeschlossen wurde.&lt;/p&gt;
+&lt;p&gt;Ich war nach Einbau des Gerätes und Sichtung der Anleitung überrascht, dass Die Compress 5000 DW keinerlei digitale Schnittstellen nach “außen” hat, weder eine WLAN-Anbindung für lokale/cloud based Services oder eine anders geartete digitale Schnittstelle, mit der man programmatisch das Verhalten und das Timing des Aufheizens oder der wöchentlichen Legionellenbehandlung des Gerätes beeinflussen könnte.
+Es gibt allerdings einen “Ein/Aus-Kontakt” in der Elektronikbox der Warmwasserwärmepumpe, der in der Anleitung (&lt;a href=&#34;https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf&#34;&gt;https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf&lt;/a&gt;) als “​​EIN/AUS-Kontakt für PV-Wechselrichter” bezeichnet wird.
+Leider ist die Dokumentation der Wärmepumpe unzureichend und irreführend, sodass mir eigentlich nur der experimentelle Weg blieb, um die Möglichkeiten des Kontakts auszuloten.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Hauswasserverbrauch zuverlässig erfassen mit Home Assistant</title>
       <link>http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/</link>
       <pubDate>Wed, 08 Apr 2026 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/</guid>
       <description>Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.</description>
+    </item>
+    <item>
+      <title>Impressum</title>
+      <link>http://localhost:1313/tech-blog/impressum/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/tech-blog/impressum/</guid>
+      <description>Rechtliche Informationen</description>
     </item>
   </channel>
 </rss>

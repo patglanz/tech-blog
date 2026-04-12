@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Hauswasserverbrauch messen mit Home Assistant | Pats Tech Blog</title>
+<title>Hauswasserverbrauch zuverlässig erfassen mit Home Assistant | Pats Tech Blog</title>
 <meta name="keywords" content="Home Assistant, Shelly, IoT, Tutorial">
 <meta name="description" content="Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.">
 <meta name="author" content="Patrick">
@@ -70,9 +70,10 @@
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><meta property="og:url" content="http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/">
+</script><script defer src="https://cloud.umami.is/script.js" data-website-id="0c6f44fe-acc2-45ff-b9a3-1a1f9822b1ac"></script>
+<meta property="og:url" content="http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/">
   <meta property="og:site_name" content="Pats Tech Blog">
-  <meta property="og:title" content="Hauswasserverbrauch messen mit Home Assistant">
+  <meta property="og:title" content="Hauswasserverbrauch zuverlässig erfassen mit Home Assistant">
   <meta property="og:description" content="Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.">
   <meta property="og:locale" content="de_de">
   <meta property="og:type" content="article">
@@ -86,7 +87,7 @@
     <meta property="og:image" content="http://localhost:1313/tech-blog/images/wasserzaehler.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://localhost:1313/tech-blog/images/wasserzaehler.jpg">
-  <meta name="twitter:title" content="Hauswasserverbrauch messen mit Home Assistant">
+  <meta name="twitter:title" content="Hauswasserverbrauch zuverlässig erfassen mit Home Assistant">
   <meta name="twitter:description" content="Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.">
 
 
@@ -104,7 +105,7 @@
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Hauswasserverbrauch messen mit Home Assistant",
+      "name": "Hauswasserverbrauch zuverlässig erfassen mit Home Assistant",
       "item": "http://localhost:1313/tech-blog/posts/wasserzaehler-home-assistant/"
     }
   ]
@@ -114,14 +115,14 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Hauswasserverbrauch messen mit Home Assistant",
-  "name": "Hauswasserverbrauch messen mit Home Assistant",
+  "headline": "Hauswasserverbrauch zuverlässig erfassen mit Home Assistant",
+  "name": "Hauswasserverbrauch zuverlässig erfassen mit Home Assistant",
   "description": "Von scheiternden KI-Kameras zu einer soliden Impulszählung am Wasserzähler.",
   "keywords": [
     "Home Assistant", "Shelly", "IoT", "Tutorial"
   ],
-  "articleBody": "Die erste Etappe: AI on the edge (Der Fehlversuch) Unseren Hauswasserverbrauch präzise zu messen, vor Leckagen gewarnt zu werden und generell einen besseren Überblick über den Frischwasserkonsum in unserem Haushalt zu erhalten, war schon seit längerem eines meiner Integrationsziele für meine Home Assistant-Instanz.\nDas Thema “AI on the edge”, eine Kameraauswertung des analogen Wasserzählers mit hilfe eines recht günstigen Setups, bestehend aus einem ESP32-Kameramodul ESP32-CAM (https://www.berrybase.de/berrybase-esp32-cam-dev-board-ov2640-kamera-usb-zu-seriell-modul-wifi-bt-usb) und ein paar 3d-gedruckten Komponenten, war preislich recht verlockend (10 Euro plus versand für das ESP-Kamera-Modul sind echt ein Schnapper). Die Setup-Dokumentation ist auch recht gut: https://www.home-assistant.io/docs/energy/water/ und https://github.com/jomjol/AI-on-the-edge-device und genügend 3D-Modelle, um das Ganze auf eine analoge Wasseruhr draufzubasteln gibt es auch, z.B. hier: https://makerworld.com/en/search/models?keyword=AI+on+the+edge\nMein Scheitern auf der ersten Etappe Was ich nicht wusste: Das ESP32-CAM-Modul mit dem On Board-Wifimodul verlangt ohne externe Antenne einen 2.4 Ghz-Access Point in einem Radius von geschätzt 5-6 Metern. Du brauchst also zwingend eine externe Antenne, z.B. die hier: https://www.amazon.de/dp/B0CJY47TTJ Ansonsten bleibt die WiFi-Verbindung zu Deiner “AI on the edge”-Instanz dunkel. Auch mit der externen Antenne musste ich, um eine stabile Verbindung zum “AI on the Edge”-Setup zu erreichen, einen zusätzlichen WiFi-Access-Point im Keller installieren.\nBei den ESP32-CAMs gibt es wohl auch Qualitätsunterschiede, insbesondere beim Objektiv. Ich habe an meinem Setup stundenlang herumjustiert (Brennweite, Beleuchtung), leider ohne Erfolg. Nur der Rollenzähler wurde abgelesen, somit hatte ich bei meiner amtlichen Wasseruhr nur eine Genauigkeit von 1000 Litern.\nMein erster Prototyp sah so aus: der erste Wurf Plan B: Ein zweiter Wasserzähler Die Idee: Einen Impulswasserzähler einzusetzen. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird. Ich habe mir dann einen “Diehl AQUARIUS P mit Impulsausgang (Reedschalter), Kabellänge 2 m, Kontaktbelastung 24 V ~ 0.2 A” zugelegt. Die Idee: Die Impulse am Kabel des Wasserzählers mit einem Shelly 1 Gen4-Modul zu zählen. (Den Einbau eines solchen Zählers in die Hauptwasserleitung sollte man unbedingt vom Fachmann vornehmen lassen.) der Impulszähler Das Shelly 1-Modul Wasserverbrauch mit Impulszähler, Shelly 1 und Home Assistant erfassen Nachdem der Wasserzähler vom Fachmann eingebaut wurde😉, kann die Verkabelung mit dem Shelly wie folgt angelegt werden: Wiring Das Netzteil ist hier etwas übertrieben dargestellt. Ein einfaches Steckernetzteil mit 12V/1A reicht vollkommen aus.\n⚠️ ACHTUNG: SICHERHEITSHINWEIS AUF KEINEN FALL DEN SHELLY IN DIESEM SETUP MIT 220V BETREIBEN! Die Klemme SW (Switch) am Shelly hat keine galvanische Trennung zur Stromversorgung. Wenn der Shelly an 230V angeschlossen ist, liegt auf dem dünnen Kabel, das von der SW-Klemme zum Wasserzähler führt, die volle Netzspannung an und wird den Reedkontakt zerstören!! Zur Stromversorgung des Shelly Moduls in diesem Setup immer nur ein 12V Steckernetzteil benutzen.\nDer eingebaute Zähler inklusive Shelly 1 Gen4 im im 3-D-Gedrucktem Gehäuse sieht bei mir so aus: der Impulszähler, mit Shelly-Modul Das weiße Gehäuse über dem oberen Absperrschieber ist ein 3D-gedrucktes Gehäuse für das Shelly-Modul. Das schützt das Shelly 1 vor Feuchtigkeit und kann hier downgeloadet werden: https://makerworld.com/en/models/470912-shelly-1-plus-wallmount\nWichtig: Nach Einbindung des Shelly 1 in das Netzwerk sollte der Schalterport auf “detached” gestellt werden, um ein Mitlaufen des Relais zu verhindern, wenn der Zähler einen Impuls sendet: Shelly 1 Web Interface Den Shelly in Home Assistant einbinden: https://www.home-assistant.io/integrations/shelly/\nHome Assistant: Die Impulse zählen Nachdem der Shelly in Home Assistant eingebunden wurde, hat man nun eine Entität für den Shelly (meist ein Schalter oder Binärsensor), der bei jedem Impuls kurz von Aus auf An springt.\nUm diese Impulse zu sammeln, legt man einen Zähler an:\nMan geht in Home Assistant auf Einstellungen -\u003e Geräte \u0026 Dienste -\u003e Helfer.\nUnten rechts auf Helfer erstellen gehen und Zähler wählen (Counter).\nZ.B. Wasser Impulse (der Startwert ist 0) nennen und auf Erstellen klicken.\nNun zu Einstellungen -\u003e Automatisierungen gehen und eine neue Automatisierung erstellen:\nAuslöser (Trigger): Zustand. Entität ist der Shelly-Schalter/Eingang. Von Aus (off) zu An (on).\nIn meinem Fall habe ich den Shelly 1 “watermeter” genannt. Entsprechend hieß der sensor/Schalter es Shelly “binary_sensor.watermeter_input_0”\nAktion: Dienst ausführen.\\ Zähler: Erhöhen (counter.increment) wählen und den neuen Zähler “Wasser Impulse” als Ziel auswählen.\\ Automatisierung speichern. Jetzt zählt Home Assistant jeden Impuls (1, 2, 3…) hoch.\nhier der YAML-Code meiner Automatisierung, um mit dem “Puls” des Shelly-Binärsensors den Zähler (Die Helpervariable) hochzusetzen (binary_sensor.watermeter_input_0 ist der Sensor des Shellys, counter.water_pulse ist die Helper-Variable.)\nalias: \"Water consuption: Count the pulse\" description: Increases the helper counter for every pulse received. triggers: - entity_id: binary_sensor.watermeter_input_0 from: \"off\" to: \"on\" trigger: state actions: - action: counter.increment target: entity_id: counter.water_pulse mode: single Mit diesem Setup hat man nun einen für alle Ewigkeit kumulierenden Zähler, der jedesmal, wenn die Wasseruhr einen “Puls” an den Shelly sendet, “1” weiterzählt.\nIn einem nächsten Schritt wird eine weitere Helfervariable angelegt, die einen “Puls” als 10 Liter darstellt und zählt. Hierzu müssen die Daten des im vorherigen Schrittes angelegten Pulszählers in einer neu angelegten Helfervariable umgerechnet werden:\nGehe in Home Assistant in der linken Seitenleiste auf: Einstellungen -\u003e Geräte \u0026 Dienste: Reiter Helfer.\nKlicke unten rechts auf Helfer erstellen.\nWähle in der Liste Template und danach Template für einen Sensor erstellen aus.\nFülle die Felder in dem neuen Fenster exakt so aus:\nName: Wasserverbrauch Gesamt (oder ein Name deiner Wahl)\nZustandstemplate: Kopiere den folgenden Code genau so hinein:\nCode-Snippet {{ states('counter.water_pulse') | float(0) * 10 }}\nMaßeinheit: L (Wichtig: Großes L für Liter)\nGeräteklasse: Water (Wasser)\nZustandsklasse: Total increasing (Total zunehmend) Template für den Sensor Klicke auf Absenden.\nDamit ist die Umrechnung fertig! Home Assistant erstellt nun automatisch die Entität sensor.wasserverbrauch_gesamt.\nDieser Sensor nimmt ab sofort die reine Impuls-Zahl aus deinem Counter (counter.water_pulse), rechnet immer sofort eine Null hinten dran (mal 10) und meldet dem System das Ergebnis als echte Liter. Genau diesen neuen Sensor kannst du jetzt im Energie-Dashboard unter “Wasserverbrauch” eintragen.\n",
-  "wordCount" : "942",
+  "articleBody": "Die erste Etappe: AI on the edge (Der Fehlversuch) Unseren Hauswasserverbrauch präzise zu messen, vor Leckagen gewarnt zu werden und generell einen besseren Überblick über den Frischwasserkonsum in unserem Haushalt zu erhalten, war schon seit längerem eines meiner Integrationsziele für meine Home Assistant-Instanz.\nDas Thema “AI on the edge”, eine Kameraauswertung des analogen Wasserzählers mit hilfe eines recht günstigen Setups, bestehend aus einem ESP32-Kameramodul ESP32-CAM (https://www.berrybase.de/berrybase-esp32-cam-dev-board-ov2640-kamera-usb-zu-seriell-modul-wifi-bt-usb) und ein paar 3d-gedruckten Komponenten, war preislich recht verlockend (10 Euro plus versand für das ESP-Kamera-Modul sind echt ein Schnapper). Die Setup-Dokumentation ist auch recht gut: https://www.home-assistant.io/docs/energy/water/ und https://github.com/jomjol/AI-on-the-edge-device und genügend 3D-Modelle, um das Ganze auf eine analoge Wasseruhr draufzubasteln gibt es auch, z.B. hier: https://makerworld.com/en/search/models?keyword=AI+on+the+edge\nMein Scheitern auf der ersten Etappe Was ich nicht wusste: Das ESP32-CAM-Modul mit dem On Board-Wifimodul verlangt ohne externe Antenne einen 2.4 Ghz-Access Point in einem Radius von geschätzt 5-6 Metern. Du brauchst also zwingend eine externe Antenne, z.B. die hier: https://www.amazon.de/dp/B0CJY47TTJ Ansonsten bleibt die WiFi-Verbindung zu Deiner “AI on the edge”-Instanz dunkel. Auch mit der externen Antenne musste ich, um eine stabile Verbindung zum “AI on the Edge”-Setup zu erreichen, einen zusätzlichen WiFi-Access-Point im Keller installieren.\nBei den ESP32-CAMs gibt es wohl auch Qualitätsunterschiede, insbesondere beim Objektiv. Ich habe an meinem Setup stundenlang herumjustiert (Brennweite, Beleuchtung), leider ohne Erfolg. Nur der Rollenzähler wurde abgelesen, somit hatte ich bei meiner amtlichen Wasseruhr nur eine Genauigkeit von 1000 Litern.\nMein erster Prototyp sah so aus: der erste Wurf An der Stelle habe ich beschlossen, das Projekt “AI on the edge” mit der ESP32-CAM zu beenden. Das war zu viel Aufwand und zu wenig Ergebnis für mich, leider.\nPlan B: Ein zweiter Wasserzähler Die Idee: Einen zusätzlichen Impulswasserzähler einzusetzen, und zwar hinter der “amtlichen” Wasseruhr. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird. Ich habe mir dann einen “Diehl AQUARIUS P mit Impulsausgang (Reedschalter), Kabellänge 2 m, Kontaktbelastung 24 V ~ 0.2 A” zugelegt. Die Idee: Die Impulse am Kabel des Wasserzählers mit einem Shelly 1 Gen4-Modul zu zählen. (Den Einbau eines solchen Zählers in die Hauptwasserleitung sollte man unbedingt vom Fachmann vornehmen lassen.) der Impulszähler Das Shelly 1-Modul Wasserverbrauch mit Impulszähler, Shelly 1 und Home Assistant erfassen Nachdem der Wasserzähler vom Fachmann eingebaut wurde😉, kann die Verkabelung mit dem Shelly wie folgt angelegt werden: Wiring Das Netzteil ist hier etwas übertrieben dargestellt. Ein einfaches Steckernetzteil mit 12V/1A reicht vollkommen aus.\n⚠️ ACHTUNG: SICHERHEITSHINWEIS AUF KEINEN FALL DEN SHELLY IN DIESEM SETUP MIT 220V BETREIBEN! Die Klemme SW (Switch) am Shelly hat keine galvanische Trennung zur Stromversorgung. Wenn der Shelly an 230V angeschlossen ist, liegt auf dem dünnen Kabel, das von der SW-Klemme zum Wasserzähler führt, die volle Netzspannung an und wird den Reedkontakt zerstören!! Zur Stromversorgung des Shelly Moduls in diesem Setup immer nur ein 12V Steckernetzteil benutzen.\nDer eingebaute Zähler inklusive Shelly 1 Gen4 im im 3-D-Gedrucktem Gehäuse sieht bei mir so aus: der Impulszähler, mit Shelly-Modul Das weiße Gehäuse über dem oberen Absperrschieber ist ein 3D-gedrucktes Gehäuse für das Shelly-Modul. Das schützt das Shelly 1 vor Feuchtigkeit und kann hier downgeloadet werden: https://makerworld.com/en/models/470912-shelly-1-plus-wallmount\nWichtig: Nach Einbindung des Shelly 1 in das Netzwerk sollte der Schalterport auf “detached” gestellt werden, um ein Mitlaufen des Relais zu verhindern, wenn der Zähler einen Impuls sendet: Shelly 1 Web Interface Den Shelly in Home Assistant einbinden: https://www.home-assistant.io/integrations/shelly/\nHome Assistant: Die Impulse zählen Nachdem der Shelly in Home Assistant eingebunden wurde, hat man nun eine Entität für den Shelly (meist ein Schalter oder Binärsensor), der bei jedem Impuls kurz von Aus auf An springt.\nUm diese Impulse zu sammeln, legt man einen Zähler an:\nMan geht in Home Assistant auf Einstellungen -\u003e Geräte \u0026 Dienste -\u003e Helfer.\nUnten rechts auf Helfer erstellen gehen und Zähler wählen (Counter).\nZ.B. Wasser Impulse (der Startwert ist 0) nennen und auf Erstellen klicken.\nNun zu Einstellungen -\u003e Automatisierungen gehen und eine neue Automatisierung erstellen:\nAuslöser (Trigger): Zustand. Entität ist der Shelly-Schalter/Eingang. Von Aus (off) zu An (on).\nIn meinem Fall habe ich den Shelly 1 “watermeter” genannt. Entsprechend hieß der sensor/Schalter des Shelly: “binary_sensor.watermeter_input_0”\nAktion: Dienst ausführen.\\ Zähler: Erhöhen (counter.increment) wählen und den neuen Zähler “Wasser Impulse” als Ziel auswählen.\\ Automatisierung speichern. Jetzt zählt Home Assistant jeden Impuls (1, 2, 3…) hoch.\nhier der YAML-Code meiner Automatisierung, um mit dem “Puls” des Shelly-Binärsensors den Zähler (Die Helpervariable) hochzusetzen (binary_sensor.watermeter_input_0 ist der Sensor des Shellys, counter.water_pulse ist die Helper-Variable.)\nalias: \"Water consuption: Count the pulse\" description: Increases the helper counter for every pulse received. triggers: - entity_id: binary_sensor.watermeter_input_0 from: \"off\" to: \"on\" trigger: state actions: - action: counter.increment target: entity_id: counter.water_pulse mode: single Mit diesem Setup hat man nun einen für alle Ewigkeit kumulierenden Zähler, der jedesmal, wenn die Wasseruhr einen “Puls” an den Shelly sendet, “1” weiterzählt.\nIn einem nächsten Schritt wird eine weitere Helfervariable angelegt, die einen “Puls” als 10 Liter darstellt und zählt. Hierzu müssen die Daten des im vorherigen Schrittes angelegten Pulszählers in einer neu angelegten Helfervariable umgerechnet werden:\nGehe in Home Assistant in der linken Seitenleiste auf: Einstellungen -\u003e Geräte \u0026 Dienste: Reiter Helfer.\nKlicke unten rechts auf Helfer erstellen.\nWähle in der Liste Template und danach Template für einen Sensor erstellen aus.\nFülle die Felder in dem neuen Fenster exakt so aus:\nName: Wasserverbrauch Gesamt (oder ein Name deiner Wahl)\nZustandstemplate: Kopiere den folgenden Code genau so hinein:\nCode-Snippet {{ states('counter.water_pulse') | float(0) * 10 }}\nMaßeinheit: L (Wichtig: Großes L für Liter)\nGeräteklasse: Water (Wasser)\nZustandsklasse: Total increasing (Total zunehmend) Template für den Sensor Klicke auf Absenden.\nDamit ist die Umrechnung fertig! Home Assistant erstellt nun automatisch die Entität sensor.wasserverbrauch_gesamt.\nDieser Sensor nimmt ab sofort die reine Impuls-Zahl aus deinem Counter (counter.water_pulse), rechnet immer sofort eine Null hinten dran (mal 10) und meldet dem System das Ergebnis als echte Liter. Genau diesen neuen Sensor kannst du jetzt im Energie-Dashboard unter “Wasserverbrauch” eintragen. Dann solltest Du in kürzester Zeit auch schon Deinen Wasserverbrauch im Energiedashboard sehen: Geschafft: Der Wasserverbrauch im Energiedashboard! ",
+  "wordCount" : "996",
   "inLanguage": "en",
   "image":"http://localhost:1313/tech-blog/images/wasserzaehler.jpg","datePublished": "2026-04-08T00:00:00Z",
   "dateModified": "2026-04-08T00:00:00Z",
@@ -189,6 +190,11 @@
                     </svg>
                 </a>
             </li>
+            <li>
+                <a href="http://localhost:1313/tech-blog/impressum" title="Impressum">
+                    <span>Impressum</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
@@ -198,7 +204,7 @@
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      Hauswasserverbrauch messen mit Home Assistant
+      Hauswasserverbrauch zuverlässig erfassen mit Home Assistant
     </h1>
     <div class="post-meta"><span title='2026-04-08 00:00:00 +0000 UTC'>April 8, 2026</span>&nbsp;·&nbsp;<span>Patrick</span>
 
@@ -223,9 +229,10 @@ Auch mit der externen Antenne musste ich, um eine stabile Verbindung zum “AI o
             der erste Wurf
         </figcaption>
 </figure>
-</p>
+
+An der Stelle habe ich beschlossen, das Projekt “AI on the edge” mit der ESP32-CAM zu beenden. Das war zu viel Aufwand und zu wenig Ergebnis für mich, leider.</p>
 <h2 id="plan-b-ein-zweiter-wasserzähler">Plan B: Ein zweiter Wasserzähler<a hidden class="anchor" aria-hidden="true" href="#plan-b-ein-zweiter-wasserzähler">#</a></h2>
-<p>Die Idee: Einen Impulswasserzähler einzusetzen. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird.
+<p>Die Idee: Einen zusätzlichen Impulswasserzähler einzusetzen, und zwar hinter der &ldquo;amtlichen&rdquo; Wasseruhr. Impulswasserzähler werden mit einem Impulsausgang geliefert: Ein zweiadriges Kabel, über das via Reedkontakt nach Durchfluss einer bestimmten Wassermenge (1,10,100 Liter) ein Schalter geschlossen wird.
 Ich habe mir dann einen “Diehl AQUARIUS P mit Impulsausgang (Reedschalter), Kabellänge 2 m, Kontaktbelastung 24 V ~ 0.2 A” zugelegt. Die Idee: Die Impulse am Kabel des Wasserzählers mit einem Shelly 1 Gen4-Modul zu zählen.
 (Den Einbau eines solchen Zählers in die Hauptwasserleitung sollte man unbedingt vom Fachmann vornehmen lassen.)
 <figure>
@@ -253,7 +260,7 @@ Ich habe mir dann einen “Diehl AQUARIUS P mit Impulsausgang (Reedschalter), Ka
 <p>AUF KEINEN FALL DEN SHELLY IN DIESEM SETUP MIT 220V BETREIBEN! Die Klemme SW (Switch) am Shelly hat keine galvanische Trennung zur Stromversorgung. Wenn der Shelly an 230V angeschlossen ist, liegt auf dem dünnen Kabel, das von der SW-Klemme zum Wasserzähler führt, die volle Netzspannung an und wird den Reedkontakt zerstören!! Zur Stromversorgung des Shelly Moduls in diesem Setup immer nur ein 12V Steckernetzteil benutzen.</p>
 <p>Der eingebaute Zähler inklusive Shelly 1 Gen4 im im 3-D-Gedrucktem Gehäuse sieht bei mir so aus:
 <figure>
-        <img loading="lazy" src="http://localhost:1313/tech-blog/images/insitu.jpg" width="400px"/> <figcaption>
+        <img loading="lazy" src="http://localhost:1313/tech-blog/images/insitu.jpg" width="700px"/> <figcaption>
                 der Impulszähler, mit Shelly-Modul
             </figcaption>
     </figure>
@@ -275,7 +282,7 @@ Unten rechts auf Helfer erstellen gehen und Zähler wählen (Counter).<br>
 Z.B. Wasser Impulse (der Startwert ist 0) nennen und auf Erstellen klicken.<br>
 Nun zu Einstellungen -&gt; Automatisierungen gehen und eine neue Automatisierung erstellen:<br>
 Auslöser (Trigger): Zustand. Entität ist der Shelly-Schalter/Eingang. Von Aus (off) zu An (on).<br>
-In meinem Fall habe ich den Shelly 1 “watermeter” genannt. Entsprechend hieß der sensor/Schalter es Shelly  “binary_sensor.watermeter_input_0”<br>
+In meinem Fall habe ich den Shelly 1 “watermeter” genannt. Entsprechend hieß der sensor/Schalter des Shelly:  “binary_sensor.watermeter_input_0”<br>
 Aktion: Dienst ausführen.\ Zähler: Erhöhen (counter.increment) wählen und den neuen Zähler &ldquo;Wasser Impulse&rdquo; als Ziel auswählen.\ Automatisierung speichern. Jetzt zählt Home Assistant jeden Impuls (1, 2, 3&hellip;) hoch.</p>
 <p>hier der YAML-Code meiner Automatisierung, um mit dem “Puls” des Shelly-Binärsensors den Zähler (Die Helpervariable) hochzusetzen (binary_sensor.watermeter_input_0 ist der Sensor des Shellys, counter.water_pulse ist die Helper-Variable.)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">alias</span>: <span style="color:#e6db74">&#34;Water consuption: Count the pulse&#34;</span>
@@ -311,7 +318,13 @@ Zustandsklasse: Total increasing (Total zunehmend)
 </p>
 <p>Klicke auf Absenden.<br>
 Damit ist die Umrechnung fertig! Home Assistant erstellt nun automatisch die Entität sensor.wasserverbrauch_gesamt.<br>
-Dieser Sensor nimmt ab sofort die reine Impuls-Zahl aus deinem Counter (counter.water_pulse), rechnet immer sofort eine Null hinten dran (mal 10) und meldet dem System das Ergebnis als echte Liter. Genau diesen neuen Sensor kannst du jetzt im Energie-Dashboard unter &ldquo;Wasserverbrauch&rdquo; eintragen.</p>
+Dieser Sensor nimmt ab sofort die reine Impuls-Zahl aus deinem Counter (counter.water_pulse), rechnet immer sofort eine Null hinten dran (mal 10) und meldet dem System das Ergebnis als echte Liter. Genau diesen neuen Sensor kannst du jetzt im Energie-Dashboard unter &ldquo;Wasserverbrauch&rdquo; eintragen. Dann solltest Du in kürzester Zeit auch schon Deinen Wasserverbrauch im Energiedashboard sehen:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/waterconsumption.jpg" width="700px"/> <figcaption>
+            Geschafft: Der Wasserverbrauch im Energiedashboard!
+        </figcaption>
+</figure>
+</p>
 
 
   </div>

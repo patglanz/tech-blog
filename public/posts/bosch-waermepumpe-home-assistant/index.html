@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/tech-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=tech-blog/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden | Pats Tech Blog</title>
+<meta name="keywords" content="Home Assistant, Bosch, Wärmepumpe, Smarthome">
+<meta name="description" content="Seit kurzem bin ich Besitzer einer Warmwasserwärmepumpe Bosch Compress 5000 DW, die mir von einem SHK-Fachbetrieb an unseren Brauchwasserkreislauf in unserem Haus angeschlossen wurde.
+Ich war nach Einbau des Gerätes und Sichtung der Anleitung überrascht, dass Die Compress 5000 DW keinerlei digitale Schnittstellen nach “außen” hat, weder eine WLAN-Anbindung für lokale/cloud based Services oder eine anders geartete digitale Schnittstelle, mit der man programmatisch das Verhalten und das Timing des Aufheizens oder der wöchentlichen Legionellenbehandlung des Gerätes beeinflussen könnte.
+Es gibt allerdings einen “Ein/Aus-Kontakt” in der Elektronikbox der Warmwasserwärmepumpe, der in der Anleitung (https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf) als “​​EIN/AUS-Kontakt für PV-Wechselrichter” bezeichnet wird.
+Leider ist die Dokumentation der Wärmepumpe unzureichend und irreführend, sodass mir eigentlich nur der experimentelle Weg blieb, um die Möglichkeiten des Kontakts auszuloten.">
+<meta name="author" content="Patrick">
+<link rel="canonical" href="http://localhost:1313/tech-blog/posts/bosch-waermepumpe-home-assistant/">
+<link crossorigin="anonymous" href="http://localhost:1313/tech-blog/assets/css/stylesheet.199042e659bc7245f5609d333d6c044eb554a0640849bb874e1dff8eb0f57209.css" integrity="sha256-GZBC5lm8ckX1YJ0zPWwETrVUoGQISbuHTh3/jrD1cgk=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/tech-blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/tech-blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/tech-blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/tech-blog/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/tech-blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/tech-blog/posts/bosch-waermepumpe-home-assistant/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><script defer src="https://cloud.umami.is/script.js" data-website-id="0c6f44fe-acc2-45ff-b9a3-1a1f9822b1ac"></script>
+<meta property="og:url" content="http://localhost:1313/tech-blog/posts/bosch-waermepumpe-home-assistant/">
+  <meta property="og:site_name" content="Pats Tech Blog">
+  <meta property="og:title" content="Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden">
+  <meta property="og:description" content="Seit kurzem bin ich Besitzer einer Warmwasserwärmepumpe Bosch Compress 5000 DW, die mir von einem SHK-Fachbetrieb an unseren Brauchwasserkreislauf in unserem Haus angeschlossen wurde.
+Ich war nach Einbau des Gerätes und Sichtung der Anleitung überrascht, dass Die Compress 5000 DW keinerlei digitale Schnittstellen nach “außen” hat, weder eine WLAN-Anbindung für lokale/cloud based Services oder eine anders geartete digitale Schnittstelle, mit der man programmatisch das Verhalten und das Timing des Aufheizens oder der wöchentlichen Legionellenbehandlung des Gerätes beeinflussen könnte. Es gibt allerdings einen “Ein/Aus-Kontakt” in der Elektronikbox der Warmwasserwärmepumpe, der in der Anleitung (https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf) als “​​EIN/AUS-Kontakt für PV-Wechselrichter” bezeichnet wird. Leider ist die Dokumentation der Wärmepumpe unzureichend und irreführend, sodass mir eigentlich nur der experimentelle Weg blieb, um die Möglichkeiten des Kontakts auszuloten.">
+  <meta property="og:locale" content="de_de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-12T19:00:00+02:00">
+    <meta property="article:modified_time" content="2026-04-12T19:00:00+02:00">
+    <meta property="article:tag" content="Home Assistant">
+    <meta property="article:tag" content="Bosch">
+    <meta property="article:tag" content="Wärmepumpe">
+    <meta property="article:tag" content="Smarthome">
+    <meta property="og:image" content="http://localhost:1313/tech-blog/images/bosch_compress_5000dw.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://localhost:1313/tech-blog/images/bosch_compress_5000dw.jpg">
+  <meta name="twitter:title" content="Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden">
+  <meta name="twitter:description" content="Seit kurzem bin ich Besitzer einer Warmwasserwärmepumpe Bosch Compress 5000 DW, die mir von einem SHK-Fachbetrieb an unseren Brauchwasserkreislauf in unserem Haus angeschlossen wurde.
+Ich war nach Einbau des Gerätes und Sichtung der Anleitung überrascht, dass Die Compress 5000 DW keinerlei digitale Schnittstellen nach “außen” hat, weder eine WLAN-Anbindung für lokale/cloud based Services oder eine anders geartete digitale Schnittstelle, mit der man programmatisch das Verhalten und das Timing des Aufheizens oder der wöchentlichen Legionellenbehandlung des Gerätes beeinflussen könnte. Es gibt allerdings einen “Ein/Aus-Kontakt” in der Elektronikbox der Warmwasserwärmepumpe, der in der Anleitung (https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf) als “​​EIN/AUS-Kontakt für PV-Wechselrichter” bezeichnet wird. Leider ist die Dokumentation der Wärmepumpe unzureichend und irreführend, sodass mir eigentlich nur der experimentelle Weg blieb, um die Möglichkeiten des Kontakts auszuloten.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://localhost:1313/tech-blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden",
+      "item": "http://localhost:1313/tech-blog/posts/bosch-waermepumpe-home-assistant/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden",
+  "name": "Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden",
+  "description": "Seit kurzem bin ich Besitzer einer Warmwasserwärmepumpe Bosch Compress 5000 DW, die mir von einem SHK-Fachbetrieb an unseren Brauchwasserkreislauf in unserem Haus angeschlossen wurde.\nIch war nach Einbau des Gerätes und Sichtung der Anleitung überrascht, dass Die Compress 5000 DW keinerlei digitale Schnittstellen nach “außen” hat, weder eine WLAN-Anbindung für lokale/cloud based Services oder eine anders geartete digitale Schnittstelle, mit der man programmatisch das Verhalten und das Timing des Aufheizens oder der wöchentlichen Legionellenbehandlung des Gerätes beeinflussen könnte. Es gibt allerdings einen “Ein/Aus-Kontakt” in der Elektronikbox der Warmwasserwärmepumpe, der in der Anleitung (https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf) als “​​EIN/AUS-Kontakt für PV-Wechselrichter” bezeichnet wird. Leider ist die Dokumentation der Wärmepumpe unzureichend und irreführend, sodass mir eigentlich nur der experimentelle Weg blieb, um die Möglichkeiten des Kontakts auszuloten.\n",
+  "keywords": [
+    "Home Assistant", "Bosch", "Wärmepumpe", "Smarthome"
+  ],
+  "articleBody": "Seit kurzem bin ich Besitzer einer Warmwasserwärmepumpe Bosch Compress 5000 DW, die mir von einem SHK-Fachbetrieb an unseren Brauchwasserkreislauf in unserem Haus angeschlossen wurde.\nIch war nach Einbau des Gerätes und Sichtung der Anleitung überrascht, dass Die Compress 5000 DW keinerlei digitale Schnittstellen nach “außen” hat, weder eine WLAN-Anbindung für lokale/cloud based Services oder eine anders geartete digitale Schnittstelle, mit der man programmatisch das Verhalten und das Timing des Aufheizens oder der wöchentlichen Legionellenbehandlung des Gerätes beeinflussen könnte. Es gibt allerdings einen “Ein/Aus-Kontakt” in der Elektronikbox der Warmwasserwärmepumpe, der in der Anleitung (https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf) als “​​EIN/AUS-Kontakt für PV-Wechselrichter” bezeichnet wird. Leider ist die Dokumentation der Wärmepumpe unzureichend und irreführend, sodass mir eigentlich nur der experimentelle Weg blieb, um die Möglichkeiten des Kontakts auszuloten.\nAb Werk hat dieser Kontakt in der Elektronikbox der Wärmepumpe den Status “geschlossen”, einfach zu erkennen an der werksseitig gelegten Kabelbrücke: Der Photovoltaik-Schaltkontakt, werksseitig gebrückt Ist der Kontakt unterbrochen, wird bei aktiviertem Display “P7” angezeigt: Displayanzeige, wenn der Photovoltaik-Kontakt offen ist Bei unterbrochenem Kontakt heizt die Pumpe das Wasser auch bei einem Temperaturabfall von mehr als 5 Grad (Werkseinstellung) unter der Solltemperatur nicht mehr auf. Der Legionellenschutz ist hiervon nicht betroffen. Einmal wöchentlich (ab dem Tag der Einschaltung der Pumpe) wird die Wassertemperatur mittels des Zuheizers auf 65 Grad gebracht (Werkseinstellung) Bei geschlossenem Kontakt wird ebenso nicht aufgeheizt, wenn die momentane Zeit außerhalb der am Display eingestellten Timerzeitspanne liegt!\nDamit Bosch-Warmwasserwärmepumpe anfängt, das Wasser aufzuheizen wird, müssen 3 Dinge erfüllt sein:\nDer Photovoltaikkontakt muss geschlossen sein (anstatt P7 wird die aktuelle Wassertemperatur angezeigt) Der Zeitpunkt muss innerhalb der an der Wärmepumpe eingestellten Timerzeitspanne liegen. Die Warmwassertemperatur muss mehr als 5 Grad unterhalb der eingestellten Solltemperatur liegen (Werkseinstellung) Der einzige extern beeinflussbare Faktor zum Einschalten des Aufheizvorgangs ist also Punkt 1, der Photovoltaikkontakt. Damit das Aufheizen der Warmwasserwärmepumpe erst dann geschieht, wenn die Solarbatterie voll aufgeladen ist, war meine Idee, den Kontakt potentialfrei über einen in Home Assistant eingebundenen Shelly 1-Schalter anzusteuern: Shelly 1: PV-Eingang potentialfrei schalten Sicherlich wäre es auch möglich, den Shelly-Schalter auch innerhalb der Elektronikbox der Wärmepumpe unterzubringen und die 220V Versorgungsspannung dort abzugreifen. Aus Garantiegründen und da die Verkabelung innerhalb der Wärmepumpe bereits werkseitig sehr unsauber (keine geraden Kabelführungen, offenbar musste an Kabellängen gespart werden) ausgeführt ist, habe ich mich dazu entschlossen, den Shelly-Schalter außerhalb der Wärmepumpe in einer Verteilerdose unterzubringen. Wahrscheinlich ist das auch besser für den WLAN-Empfang des Shelly-Schalters: Der Shelly in einer Verteilerdose (Das schwarze Kabel, das an der rechten Seite der Verteilerdose abgeht, ist das Schaltkabel, das mit dem Photovoltaik Ein/Aus-Port innerhalb der Elektronikbox verbunden ist.)\nZur Steuerung des Shelly 1-Schalters und somit der Warmwasserwärmepumpe habe ich insgesamt 3 Automatisierungen in Home Assistant angelegt.\nAutomatisierung 1: Solarbatterie über 98%, loslegen mit Laden! Zweck: Wenn der Ladezustand der Photovoltaikbatterie über 98% ansteigt und für 5 Minuten darüber bleibt und es gleichzeitig nach 9:00 morgens ist, dann soll der Shelly Switch (hier als Water heat pump booster switch bezeichnet) angeschaltet werden.\nAutomatisierung 2: Nach 16:00 müssen wir mit Warmwasserbereitung loslegen, so oder so, ob die Batterie voll ist oder nicht. Zweck: Wenn bis 16:00 Nachmittags der Batterieladezustand immer noch nicht über 98% ist, brauchen wir ja trotzdem warmes Wasser. Deswegen schalten wir den Shelly-Switch jetzt an.\nAutomatisierung 3: Nach 18:00 wird nichts mehr aufgeheizt. Zweck: Nach 18:00 schalten wir den Shelly-Schalter aus, um zu verhindern, dass die Warmwasserwärmepumpe Abends noch mal nachheizt. Dieser Zeitpunkt muss im Winter gegebenenfalls etwas nach hinten verschoben werden, da bei kälteren Temperaturen 2 Stunden Aufheizzeit wahrscheinlich nicht genügen.\nBislang funktionieren diese Automatisierungen gut. Es wird dann aufgeheizt, wenn die Batterie voll ist und die Einspeisung der PV-Anlage beginnt. Die Solltemperatur habe ich von werksseitig 55 Grad auf 50 Grad abgesenkt. Bei täglich drei Duschvorgängen ist das Wasser am nächsten Tag auf ca. 43 Grad heruntergekühlt und wird, bei im Moment sommerlich warmen Außentemperaturen (August 2025) in zirka 2 Stunden bei insgesamt 1-1,5 KW/h Stromverbrauch auf 50 Grad aufgeheizt.\nDa man aus der Ferne keinerlei Informationen von der Wärmepumpe über ihren Betriebszustand erhalten kann, ohne einen Blick auf das Display des Gerätes zu werfen, habe ich mich entschlossen, den Warmwasserabgang der Wärmepumpe mit einem in Home Assistant eingebundenen ESP8266 Board mit BME280-Temperatursensor auszustatten. Der BME280-Sensor kann zwar mehr als nötig (Temperatur, Luftdruck und relative Luftfeuchte), war aber gerade vorhanden.\nHier das verwendete Board: https://www.berrybase.de/nodemcu-v3-esp8266-development-board-ch340g\nHier der Sensor: https://www.berrybase.de/gy-bme280-breakout-board-3in1-sensor-fuer-temperatur-luftfeuchtigkeit-und-luftdruck\nDieses Gehäuse habe ich für das Board gedruckt: https://www.thingiverse.com/thing:5873177\nSo habe ich das Board und den Sensor angebracht. Rot umkreist sieht man den BME280-Sensor, angebracht am Warmwasserauslass der Warmwasserwärmepumpe: Der ESP-Temperatursensor Der Sensor am Auslass der Wärmepumpe kann natürlich nicht die tatsächliche Wassertemperatur im Wasserspeicher messen, aber man kann sehr gut Zapf-und Aufheizvorgänge in Homeassistant sehen:\nDer ESP-Temperatursensor ",
+  "wordCount" : "777",
+  "inLanguage": "en",
+  "image":"http://localhost:1313/tech-blog/images/bosch_compress_5000dw.jpg","datePublished": "2026-04-12T19:00:00+02:00",
+  "dateModified": "2026-04-12T19:00:00+02:00",
+  "author":{
+    "@type": "Person",
+    "name": "Patrick"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/tech-blog/posts/bosch-waermepumpe-home-assistant/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Pats Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/tech-blog/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/tech-blog/" accesskey="h" title="Pats Tech Blog (Alt + H)">Pats Tech Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/tech-blog/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/patglanz/tech-blog" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tech-blog/impressum" title="Impressum">
+                    <span>Impressum</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden
+    </h1>
+    <div class="post-meta"><span title='2026-04-12 19:00:00 +0200 CEST'>April 12, 2026</span>&nbsp;·&nbsp;<span>Patrick</span>
+
+</div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="eager" src="http://localhost:1313/tech-blog/images/bosch_compress_5000dw.jpg" alt="Die Bosch Wärmepumpe 5000DW">
+        <figcaption>Nicht so smarte Geräte Home Assistant ready machen. Einen Gabelschlüssel braucht ihr dazu nicht.</figcaption>
+</figure>
+  <div class="post-content"><p>Seit kurzem bin ich Besitzer einer Warmwasserwärmepumpe Bosch Compress 5000 DW, die mir von einem SHK-Fachbetrieb an unseren Brauchwasserkreislauf in unserem Haus angeschlossen wurde.</p>
+<p>Ich war nach Einbau des Gerätes und Sichtung der Anleitung überrascht, dass Die Compress 5000 DW keinerlei digitale Schnittstellen nach “außen” hat, weder eine WLAN-Anbindung für lokale/cloud based Services oder eine anders geartete digitale Schnittstelle, mit der man programmatisch das Verhalten und das Timing des Aufheizens oder der wöchentlichen Legionellenbehandlung des Gerätes beeinflussen könnte.
+Es gibt allerdings einen “Ein/Aus-Kontakt” in der Elektronikbox der Warmwasserwärmepumpe, der in der Anleitung (<a href="https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf">https://bosch-de-de.boschhc-documents.com/download/file/file/6721842158.pdf</a>) als “​​EIN/AUS-Kontakt für PV-Wechselrichter” bezeichnet wird.
+Leider ist die Dokumentation der Wärmepumpe unzureichend und irreführend, sodass mir eigentlich nur der experimentelle Weg blieb, um die Möglichkeiten des Kontakts auszuloten.</p>
+<p>Ab Werk hat dieser Kontakt in der Elektronikbox der Wärmepumpe den Status “geschlossen”, einfach zu erkennen an der werksseitig gelegten Kabelbrücke:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/pv_switch_pw5000.jpg" width="600px"/> <figcaption>
+            Der Photovoltaik-Schaltkontakt, werksseitig gebrückt
+        </figcaption>
+</figure>
+</p>
+<p>Ist der Kontakt unterbrochen, wird bei aktiviertem Display “P7” angezeigt:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/p7_pw5000.jpg" width="600px"/> <figcaption>
+            Displayanzeige, wenn der Photovoltaik-Kontakt offen ist
+        </figcaption>
+</figure>
+</p>
+<p>Bei unterbrochenem Kontakt heizt die Pumpe das Wasser auch bei einem Temperaturabfall von mehr als 5 Grad (Werkseinstellung) unter der Solltemperatur nicht mehr auf.
+Der Legionellenschutz ist hiervon nicht betroffen. Einmal wöchentlich (ab dem Tag der Einschaltung der Pumpe) wird die Wassertemperatur mittels des Zuheizers auf 65 Grad gebracht (Werkseinstellung)
+Bei geschlossenem Kontakt wird ebenso nicht aufgeheizt, wenn die momentane Zeit außerhalb der am Display eingestellten Timerzeitspanne liegt!</p>
+<p>Damit Bosch-Warmwasserwärmepumpe anfängt, das Wasser aufzuheizen wird, müssen 3 Dinge erfüllt sein:</p>
+<ol>
+<li>Der Photovoltaikkontakt muss geschlossen sein (anstatt P7 wird die aktuelle Wassertemperatur angezeigt)</li>
+<li>Der Zeitpunkt muss innerhalb der an der Wärmepumpe eingestellten Timerzeitspanne liegen.</li>
+<li>Die Warmwassertemperatur muss mehr als 5 Grad unterhalb der eingestellten Solltemperatur liegen (Werkseinstellung)</li>
+</ol>
+<p>Der einzige extern beeinflussbare Faktor zum Einschalten des Aufheizvorgangs ist also Punkt 1, der Photovoltaikkontakt.
+Damit das Aufheizen der Warmwasserwärmepumpe erst dann geschieht, wenn die Solarbatterie voll aufgeladen ist, war meine Idee, den Kontakt potentialfrei über einen in Home Assistant eingebundenen Shelly 1-Schalter anzusteuern:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/circuit_diagram_pw5000.jpg" width="800px"/> <figcaption>
+            Shelly 1: PV-Eingang potentialfrei schalten
+        </figcaption>
+</figure>
+</p>
+<p>Sicherlich wäre es auch möglich, den Shelly-Schalter auch innerhalb der Elektronikbox der Wärmepumpe unterzubringen und die 220V Versorgungsspannung dort abzugreifen. Aus Garantiegründen und da die Verkabelung innerhalb der Wärmepumpe bereits werkseitig sehr unsauber (keine geraden Kabelführungen, offenbar musste an Kabellängen gespart werden) ausgeführt ist, habe ich mich dazu entschlossen, den Shelly-Schalter außerhalb der Wärmepumpe in einer Verteilerdose unterzubringen. Wahrscheinlich ist das auch besser für den WLAN-Empfang des Shelly-Schalters:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/shelly_pw5000.jpg" width="600px"/> <figcaption>
+            Der Shelly in einer Verteilerdose
+        </figcaption>
+</figure>
+</p>
+<p>(Das schwarze Kabel, das an der rechten Seite der Verteilerdose abgeht, ist das Schaltkabel, das mit dem Photovoltaik Ein/Aus-Port innerhalb der Elektronikbox verbunden ist.)</p>
+<p>Zur Steuerung des Shelly 1-Schalters und somit der Warmwasserwärmepumpe habe ich insgesamt 3 Automatisierungen in Home Assistant angelegt.</p>
+<p>Automatisierung 1:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/pw5000_automation1.jpg" width="600px"/> <figcaption>
+            Solarbatterie über 98%, loslegen mit Laden! 
+        </figcaption>
+</figure>
+</p>
+<p>Zweck: Wenn der Ladezustand der Photovoltaikbatterie über 98% ansteigt und für 5 Minuten darüber bleibt und es gleichzeitig nach 9:00 morgens ist, dann soll der Shelly Switch (hier als Water heat pump booster switch bezeichnet) angeschaltet werden.</p>
+<p>Automatisierung 2:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/pw5000_automation2.jpg" width="600px"/> <figcaption>
+            Nach 16:00 müssen wir mit Warmwasserbereitung loslegen, so oder so, ob die Batterie voll ist oder nicht.
+        </figcaption>
+</figure>
+</p>
+<p>Zweck: Wenn bis 16:00 Nachmittags der Batterieladezustand immer noch nicht über 98% ist, brauchen wir ja trotzdem warmes Wasser. Deswegen schalten wir den Shelly-Switch jetzt an.</p>
+<p>Automatisierung 3:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/pw5000_automation3.jpg" width="600px"/> <figcaption>
+            Nach 18:00 wird nichts mehr aufgeheizt.
+        </figcaption>
+</figure>
+</p>
+<p>Zweck: Nach 18:00 schalten wir den Shelly-Schalter aus, um zu verhindern, dass die Warmwasserwärmepumpe Abends noch mal nachheizt. Dieser Zeitpunkt muss im Winter gegebenenfalls etwas nach hinten verschoben werden, da bei kälteren Temperaturen 2 Stunden Aufheizzeit wahrscheinlich nicht genügen.</p>
+<p>Bislang funktionieren diese Automatisierungen gut. Es wird dann aufgeheizt, wenn die Batterie voll ist und die Einspeisung der PV-Anlage beginnt.
+Die Solltemperatur habe ich von werksseitig 55 Grad auf 50 Grad abgesenkt. Bei täglich drei Duschvorgängen ist das Wasser am nächsten Tag auf ca. 43 Grad heruntergekühlt und wird, bei im Moment sommerlich warmen Außentemperaturen (August 2025) in zirka 2 Stunden bei insgesamt 1-1,5 KW/h Stromverbrauch auf 50 Grad aufgeheizt.</p>
+<p>Da man aus der Ferne keinerlei Informationen von der Wärmepumpe über ihren Betriebszustand erhalten kann, ohne einen Blick auf das Display des Gerätes zu werfen, habe ich mich entschlossen, den Warmwasserabgang der Wärmepumpe mit einem in Home Assistant eingebundenen ESP8266 Board mit BME280-Temperatursensor auszustatten. Der BME280-Sensor kann zwar mehr als nötig (Temperatur, Luftdruck und relative Luftfeuchte), war aber gerade vorhanden.</p>
+<p>Hier das verwendete Board:
+<a href="https://www.berrybase.de/nodemcu-v3-esp8266-development-board-ch340g">https://www.berrybase.de/nodemcu-v3-esp8266-development-board-ch340g</a></p>
+<p>Hier der Sensor:
+<a href="https://www.berrybase.de/gy-bme280-breakout-board-3in1-sensor-fuer-temperatur-luftfeuchtigkeit-und-luftdruck">https://www.berrybase.de/gy-bme280-breakout-board-3in1-sensor-fuer-temperatur-luftfeuchtigkeit-und-luftdruck</a></p>
+<p>Dieses Gehäuse habe ich für das Board gedruckt:
+<a href="https://www.thingiverse.com/thing:5873177">https://www.thingiverse.com/thing:5873177</a></p>
+<p>So habe ich das Board und den Sensor angebracht. Rot umkreist sieht man den BME280-Sensor, angebracht am Warmwasserauslass der Warmwasserwärmepumpe:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/pw5000_esp_bme280.jpg" width="600px"/> <figcaption>
+            Der ESP-Temperatursensor
+        </figcaption>
+</figure>
+</p>
+<p>Der Sensor am Auslass der Wärmepumpe kann natürlich nicht die tatsächliche Wassertemperatur im Wasserspeicher messen, aber man kann sehr gut Zapf-und Aufheizvorgänge in Homeassistant sehen:</p>
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/pw5000_water_temp.jpg" width="600px"/> <figcaption>
+            Der ESP-Temperatursensor
+        </figcaption>
+</figure>
+
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tech-blog/tags/home-assistant/">Home Assistant</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/bosch/">Bosch</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/w%C3%A4rmepumpe/">Wärmepumpe</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/smarthome/">Smarthome</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/tech-blog/">Pats Tech Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

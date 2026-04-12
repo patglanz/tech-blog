@@ -6,13 +6,34 @@
     <description>Recent content in Tags on Pats Tech Blog</description>
     <generator>Hugo</generator>
     <language>de-de</language>
-    <lastBuildDate>Wed, 08 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 Apr 2026 19:00:00 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/tech-blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bosch</title>
+      <link>http://localhost:1313/tech-blog/tags/bosch/</link>
+      <pubDate>Sun, 12 Apr 2026 19:00:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/tags/bosch/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Home Assistant</title>
       <link>http://localhost:1313/tech-blog/tags/home-assistant/</link>
-      <pubDate>Wed, 08 Apr 2026 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 12 Apr 2026 19:00:00 +0200</pubDate>
       <guid>http://localhost:1313/tech-blog/tags/home-assistant/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Smarthome</title>
+      <link>http://localhost:1313/tech-blog/tags/smarthome/</link>
+      <pubDate>Sun, 12 Apr 2026 19:00:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/tags/smarthome/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Wärmepumpe</title>
+      <link>http://localhost:1313/tech-blog/tags/w%C3%A4rmepumpe/</link>
+      <pubDate>Sun, 12 Apr 2026 19:00:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/tags/w%C3%A4rmepumpe/</guid>
       <description></description>
     </item>
     <item>
