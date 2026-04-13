@@ -1,5 +1,5 @@
 ---
-title: "Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro sebst bauen"
+title: "Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro selbst bauen"
 date: 2026-04-13T17:30:00+02:00
 draft: false
 tags: ["Home Assistant", "ESPHome", "DIY", "Hardware", "Sensoren"]
