@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Hardware on Pats Tech Blog</title>
+    <link>http://localhost:1313/tech-blog/categories/hardware/</link>
+    <description>Recent content in Hardware on Pats Tech Blog</description>
+    <generator>Hugo</generator>
+    <language>de-de</language>
+    <lastBuildDate>Mon, 13 Apr 2026 17:30:00 +0200</lastBuildDate>
+    <atom:link href="http://localhost:1313/tech-blog/categories/hardware/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Präziser Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro</title>
+      <link>http://localhost:1313/tech-blog/posts/praeziser-temperatur-feuchte-sensor-home-assistant/</link>
+      <pubDate>Mon, 13 Apr 2026 17:30:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/posts/praeziser-temperatur-feuchte-sensor-home-assistant/</guid>
+      <description>&lt;p&gt;Wer kennt es nicht: Kommerzielle Sensoren weichen oft 2-3 Grad von der Realtemperatur ab und haben eine Auflösung von 0,5 Grad, also umgangssprachlich wahre Schätzeisen, die man nicht wirklich für Automatisierungen mit Home Assistant nutzen kann.&lt;/p&gt;
+&lt;p&gt;Heute bauen wir uns für unter 20 Euro einen Sensor, der fast auf Industriestandard misst – basierend auf einem ESP32 und einem BME280-Sensor.&lt;/p&gt;
+&lt;h2 id=&#34;die-hardware-liste&#34;&gt;Die Hardware-Liste&lt;/h2&gt;
+&lt;p&gt;Um dieses Projekt nachzubauen, brauchst du nur drei Dinge:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

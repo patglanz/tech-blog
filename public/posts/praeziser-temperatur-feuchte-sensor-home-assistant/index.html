@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/tech-blog/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=tech-blog/livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro sebst bauen | Pats Tech Blog</title>
+<meta name="keywords" content="Home Assistant, ESPHome, DIY, Hardware, Sensoren">
+<meta name="description" content="
+Wer kennt es nicht: Kommerzielle Sensoren weichen oft 2-3 Grad von der Realtemperatur ab und haben eine Auflösung von 0,5 Grad, also umgangssprachlich wahre Schätzeisen, die man nicht wirklich für Automatisierungen mit Home Assistant nutzen kann.
+Heute bauen wir uns für unter 20 Euro einen Sensor, der fast auf Industriestandard misst – basierend auf einem ESP32 und einem BME280-Sensor.
+Auch wenn es sehr verlockend ist, empfehle ich, die Teile nicht bei AL*Exzess zu bestellen. Leider wird gerade der BME280 oft gefälscht oder ein BMP mit eingeschränktem Funktionsumfang geliefert. Das ist dann sehr ärgerlich, wenn untenstehende Anleitung einfach nicht mehr passt und Du frustriert aufgeben musst.
+Qualitativ sehr gute Boards und Sensoren habe ich bislang immer von https://www.berrybase.de/ erhalten, meine 5 Cents.">
+<meta name="author" content="Patrick">
+<link rel="canonical" href="http://localhost:1313/tech-blog/posts/praeziser-temperatur-feuchte-sensor-home-assistant/">
+<link crossorigin="anonymous" href="http://localhost:1313/tech-blog/assets/css/stylesheet.199042e659bc7245f5609d333d6c044eb554a0640849bb874e1dff8eb0f57209.css" integrity="sha256-GZBC5lm8ckX1YJ0zPWwETrVUoGQISbuHTh3/jrD1cgk=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/tech-blog/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/tech-blog/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/tech-blog/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/tech-blog/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/tech-blog/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/tech-blog/posts/praeziser-temperatur-feuchte-sensor-home-assistant/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><script defer src="https://cloud.umami.is/script.js" data-website-id="0c6f44fe-acc2-45ff-b9a3-1a1f9822b1ac"></script>
+<meta property="og:url" content="http://localhost:1313/tech-blog/posts/praeziser-temperatur-feuchte-sensor-home-assistant/">
+  <meta property="og:site_name" content="Pats Tech Blog">
+  <meta property="og:title" content="Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro sebst bauen">
+  <meta property="og:description" content="Wer kennt es nicht: Kommerzielle Sensoren weichen oft 2-3 Grad von der Realtemperatur ab und haben eine Auflösung von 0,5 Grad, also umgangssprachlich wahre Schätzeisen, die man nicht wirklich für Automatisierungen mit Home Assistant nutzen kann.
+Heute bauen wir uns für unter 20 Euro einen Sensor, der fast auf Industriestandard misst – basierend auf einem ESP32 und einem BME280-Sensor. Auch wenn es sehr verlockend ist, empfehle ich, die Teile nicht bei AL*Exzess zu bestellen. Leider wird gerade der BME280 oft gefälscht oder ein BMP mit eingeschränktem Funktionsumfang geliefert. Das ist dann sehr ärgerlich, wenn untenstehende Anleitung einfach nicht mehr passt und Du frustriert aufgeben musst. Qualitativ sehr gute Boards und Sensoren habe ich bislang immer von https://www.berrybase.de/ erhalten, meine 5 Cents.">
+  <meta property="og:locale" content="de_de">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-13T17:30:00+02:00">
+    <meta property="article:modified_time" content="2026-04-13T17:30:00+02:00">
+    <meta property="article:tag" content="Home Assistant">
+    <meta property="article:tag" content="ESPHome">
+    <meta property="article:tag" content="DIY">
+    <meta property="article:tag" content="Hardware">
+    <meta property="article:tag" content="Sensoren">
+    <meta property="og:image" content="http://localhost:1313/tech-blog/images/esp32_bme280_title.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://localhost:1313/tech-blog/images/esp32_bme280_title.jpg">
+  <meta name="twitter:title" content="Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro sebst bauen">
+  <meta name="twitter:description" content="Wer kennt es nicht: Kommerzielle Sensoren weichen oft 2-3 Grad von der Realtemperatur ab und haben eine Auflösung von 0,5 Grad, also umgangssprachlich wahre Schätzeisen, die man nicht wirklich für Automatisierungen mit Home Assistant nutzen kann.
+Heute bauen wir uns für unter 20 Euro einen Sensor, der fast auf Industriestandard misst – basierend auf einem ESP32 und einem BME280-Sensor. Auch wenn es sehr verlockend ist, empfehle ich, die Teile nicht bei AL*Exzess zu bestellen. Leider wird gerade der BME280 oft gefälscht oder ein BMP mit eingeschränktem Funktionsumfang geliefert. Das ist dann sehr ärgerlich, wenn untenstehende Anleitung einfach nicht mehr passt und Du frustriert aufgeben musst. Qualitativ sehr gute Boards und Sensoren habe ich bislang immer von https://www.berrybase.de/ erhalten, meine 5 Cents.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://localhost:1313/tech-blog/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro sebst bauen",
+      "item": "http://localhost:1313/tech-blog/posts/praeziser-temperatur-feuchte-sensor-home-assistant/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro sebst bauen",
+  "name": "Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro sebst bauen",
+  "description": " Wer kennt es nicht: Kommerzielle Sensoren weichen oft 2-3 Grad von der Realtemperatur ab und haben eine Auflösung von 0,5 Grad, also umgangssprachlich wahre Schätzeisen, die man nicht wirklich für Automatisierungen mit Home Assistant nutzen kann.\nHeute bauen wir uns für unter 20 Euro einen Sensor, der fast auf Industriestandard misst – basierend auf einem ESP32 und einem BME280-Sensor. Auch wenn es sehr verlockend ist, empfehle ich, die Teile nicht bei AL*Exzess zu bestellen. Leider wird gerade der BME280 oft gefälscht oder ein BMP mit eingeschränktem Funktionsumfang geliefert. Das ist dann sehr ärgerlich, wenn untenstehende Anleitung einfach nicht mehr passt und Du frustriert aufgeben musst. Qualitativ sehr gute Boards und Sensoren habe ich bislang immer von https://www.berrybase.de/ erhalten, meine 5 Cents.\n",
+  "keywords": [
+    "Home Assistant", "ESPHome", "DIY", "Hardware", "Sensoren"
+  ],
+  "articleBody": " Wer kennt es nicht: Kommerzielle Sensoren weichen oft 2-3 Grad von der Realtemperatur ab und haben eine Auflösung von 0,5 Grad, also umgangssprachlich wahre Schätzeisen, die man nicht wirklich für Automatisierungen mit Home Assistant nutzen kann.\nHeute bauen wir uns für unter 20 Euro einen Sensor, der fast auf Industriestandard misst – basierend auf einem ESP32 und einem BME280-Sensor. Auch wenn es sehr verlockend ist, empfehle ich, die Teile nicht bei AL*Exzess zu bestellen. Leider wird gerade der BME280 oft gefälscht oder ein BMP mit eingeschränktem Funktionsumfang geliefert. Das ist dann sehr ärgerlich, wenn untenstehende Anleitung einfach nicht mehr passt und Du frustriert aufgeben musst. Qualitativ sehr gute Boards und Sensoren habe ich bislang immer von https://www.berrybase.de/ erhalten, meine 5 Cents.\nDie Software Selbstredend solltest Home Assistant am Start haben. Falls Du es noch nicht getan hast, installiere die ESP Homebuilder-Extension: https://esphome.io/guides/getting_started_hassio/\nDie Hardware-Liste Um dieses Projekt nachzubauen, brauchst du ein paar Dinge:\nESP32 Dev Board (ca. 5-7 €). BME280 Sensor Modul (hohe Präzision, ca. 3-7 €). Jumper Wire Kabel (Bei der Firma Amazing oder auf der Bucht Nach “Dupont-Kabel” suchen, weiblich-weiblich). USB (C)-Netzteil, idealerweise mehr als 1A. 3D-Drucker, für ein schickes Gehäuse. Lötkolben, um die Stiftleiste in das BME280 Modul einzulöten. Vorbereiten und initiales Flashen des ESP32 Bevor Du den ESP32 mit dem BME280-Sensor verkabelst, solltest Du ihn zuerst mit der ESPhome-Firmware flashen. Das Flashen mit ESPhome Firmware ist recht einfach: Verbinde das ESP32-Board mit einem geeigneten USB-C-Kabel mit Deinem Rechner (nicht dem Home Assistand-Computer!!). Benutze Chrome als Web Browser und gehe zu https://web.esphome.io/. Klicke auf “Connect”: Computer mit ESP32 verbinden Du solltest nun ein Auswahlfenster sehen, in dem Du eine USB(serielle) Verbindung auswählen kannst. Siehst Du diese Option nicht, ist Dein USB-Kabel in 95% aller Fälle nicht für dieses Projekt geeignet. Probiere ein anderes, für Datenübertragung geeigneteres Kabel aus. Serielle USB-Verbindung auswählen Dann mit Klicken auf “Prepare for first use” das Modul für die Erstbenutzung vorbereiten (flashen): ESP-Modul für die Erstbenutzung vorbereiten Wenn das Modul “geflasht” ist, unterbreche die Verbindung zum Rechner nicht direkt, sondern konfiguriere direkt im Anschluss die Wireless-Verbindung:\nWifi für das ESP32-Modul konfigurieren. Verkabelung (I2C) Jetzt kannst Du den BME280 Sensor anschließen. Die Verkabelung ist denkbar einfach, da wir den I2C-Bus nutzen:\nVCC an 3.3V GND an GND SCL (SCK) an GPIO 22 (D22) SDA (SDI) an GPIO 21 (D21) So wird der BME280 mit dem ESP32 verdrahtet Die Software: ESPHome Code Hier ist die Konfiguration, die du direkt in ESPHome auf Dein frisch erkanntes ESP32-Device im ESPHome-GUI von Home Assistant einfügen kannst und “over the air” auf dem ESP32-Modul mit angeschlossenem BME280-Modul installieren kannst. Denke nur daran, WiFi SSID und Passwort anzuzupassen, und den Device-Namen.\nesphome: name: esphome-something friendly_name: precise_temp_sensor min_version: 2025.9.0 name_add_mac_suffix: false esp32: variant: esp32 framework: type: esp-idf # Enable logging logger: # Enable Home Assistant API api: # Allow Over-The-Air updates ota: - platform: esphome wifi: ssid: \"secret wifi_ssid\" password: \"secret wifi_password\" i2c: sda: GPIO22 # Connected to SDA on the BME280 scl: GPIO21 # Connected to SCL on the BME280 scan: true # Scans for I2C devices on startup, helpful for debugging # Sensor configuration sensor: - platform: bme280_i2c # The I2C address is typically 0x76 or 0x77. # If 0x76 doesn't work, try 0x77. The 'scan: true' above will show the correct address in the logs. address: 0x76 update_interval: 60s temperature: name: \"BME280 Temperature\" # Optional: Add an offset if your sensor reading is slightly off # offset: -1.2 pressure: name: \"BME280 Pressure\" humidity: name: \"BME280 Humidity\" Nachdem Du den YAML-Code auf Dein ESP32-Board gepusht hast und alles glatt gelaufen ist, solltest Du im Home Assistant Dashboard nun unter Settings/Entites Deinen neunen Sensor finden. Einfach in der Suchzeile mal “ESP…” eingeben und den gefundenen Sensor einem Dasboard hinzufügen. Die Präzision dieses Setups ESP32 mit BME280 Sensor begeistert mich immer wieder:\nEin sehr präziser Temperaturverlauf, hier mein Außenthermometer ",
+  "wordCount" : "638",
+  "inLanguage": "en",
+  "image":"http://localhost:1313/tech-blog/images/esp32_bme280_title.jpg","datePublished": "2026-04-13T17:30:00+02:00",
+  "dateModified": "2026-04-13T17:30:00+02:00",
+  "author":{
+    "@type": "Person",
+    "name": "Patrick"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/tech-blog/posts/praeziser-temperatur-feuchte-sensor-home-assistant/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Pats Tech Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/tech-blog/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/tech-blog/" accesskey="h" title="Pats Tech Blog (Alt + H)">Pats Tech Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/tech-blog/posts/" title="Posts">
+                    <span>Posts</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/patglanz/tech-blog" title="GitHub">
+                    <span>GitHub</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/tech-blog/impressum" title="Impressum">
+                    <span>Impressum</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro sebst bauen
+    </h1>
+    <div class="post-meta"><span title='2026-04-13 17:30:00 +0200 CEST'>April 13, 2026</span>&nbsp;·&nbsp;<span>Patrick</span>
+
+</div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="eager" src="http://localhost:1313/tech-blog/images/esp32_bme280_title.jpg" alt="ESP32 mit BME280">
+        <figcaption>Einen präziseren Temperatur- und Feuchtesensor für Home Assistant bekommst Du nicht!</figcaption>
+</figure>
+  <div class="post-content"><hr>
+<p>Wer kennt es nicht: Kommerzielle Sensoren weichen oft 2-3 Grad von der Realtemperatur ab und haben eine Auflösung von 0,5 Grad, also umgangssprachlich wahre Schätzeisen, die man nicht wirklich für Automatisierungen mit Home Assistant nutzen kann.</p>
+<p>Heute bauen wir uns für unter 20 Euro einen Sensor, der fast auf Industriestandard misst – basierend auf einem ESP32 und einem BME280-Sensor.
+Auch wenn es sehr verlockend ist, empfehle ich, die Teile nicht bei AL*Exzess zu bestellen. Leider wird gerade der BME280 oft gefälscht oder ein BMP mit eingeschränktem Funktionsumfang geliefert. Das ist dann sehr ärgerlich, wenn untenstehende Anleitung einfach nicht mehr passt und Du frustriert aufgeben musst.
+Qualitativ sehr gute Boards und Sensoren habe ich bislang immer von <a href="https://www.berrybase.de/">https://www.berrybase.de/</a> erhalten, meine 5 Cents.</p>
+<h2 id="die-software">Die Software<a hidden class="anchor" aria-hidden="true" href="#die-software">#</a></h2>
+<p>Selbstredend solltest Home Assistant am Start haben. Falls Du es noch nicht getan hast, installiere die ESP Homebuilder-Extension: <a href="https://esphome.io/guides/getting_started_hassio/">https://esphome.io/guides/getting_started_hassio/</a></p>
+<h2 id="die-hardware-liste">Die Hardware-Liste<a hidden class="anchor" aria-hidden="true" href="#die-hardware-liste">#</a></h2>
+<p>Um dieses Projekt nachzubauen, brauchst du ein paar Dinge:</p>
+<ul>
+<li><strong>ESP32 Dev Board</strong> (ca. 5-7 €).</li>
+<li><strong>BME280 Sensor Modul</strong> (hohe Präzision, ca. 3-7 €).</li>
+<li><strong>Jumper Wire Kabel</strong> (Bei der Firma Amazing oder auf der Bucht Nach &ldquo;Dupont-Kabel&rdquo; suchen, weiblich-weiblich).</li>
+<li><strong>USB (C)-Netzteil</strong>, idealerweise mehr als 1A.</li>
+<li><strong>3D-Drucker</strong>, für ein schickes Gehäuse.</li>
+<li><strong>Lötkolben</strong>, um die Stiftleiste in das BME280 Modul einzulöten.</li>
+</ul>
+<h2 id="vorbereiten-und-initiales-flashen-des-esp32">Vorbereiten und initiales Flashen des ESP32<a hidden class="anchor" aria-hidden="true" href="#vorbereiten-und-initiales-flashen-des-esp32">#</a></h2>
+<p>Bevor Du den ESP32 mit dem BME280-Sensor verkabelst, solltest Du ihn zuerst mit der ESPhome-Firmware flashen.
+Das Flashen mit ESPhome Firmware ist recht einfach: Verbinde das ESP32-Board mit einem  geeigneten USB-C-Kabel mit Deinem Rechner (nicht dem Home Assistand-Computer!!). Benutze <strong>Chrome</strong> als Web Browser und gehe zu <a href="https://web.esphome.io/">https://web.esphome.io/</a>. Klicke auf &ldquo;Connect&rdquo;:
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/esphome_connect.jpg" width="700px"/> <figcaption>
+            Computer mit ESP32 verbinden
+        </figcaption>
+</figure>
+</p>
+<p>Du solltest nun ein Auswahlfenster sehen, in dem Du eine USB(serielle) Verbindung auswählen kannst. Siehst Du diese Option nicht, ist Dein USB-Kabel in 95% aller Fälle nicht für dieses Projekt geeignet. Probiere ein anderes, für Datenübertragung geeigneteres Kabel aus.
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/esphome_connect2.jpg" width="500px"/> <figcaption>
+            Serielle USB-Verbindung auswählen
+        </figcaption>
+</figure>
+</p>
+<p>Dann mit Klicken auf &ldquo;Prepare for first use&rdquo; das Modul für die Erstbenutzung vorbereiten (flashen):
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/esphome_first_use.jpg" width="500px"/> <figcaption>
+            ESP-Modul für die Erstbenutzung vorbereiten
+        </figcaption>
+</figure>
+</p>
+<p>Wenn das Modul &ldquo;geflasht&rdquo; ist, unterbreche die Verbindung zum Rechner nicht direkt, sondern konfiguriere direkt im Anschluss die Wireless-Verbindung:</p>
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/esphome_wifi_config.jpg" width="500px"/> <figcaption>
+            Wifi für das ESP32-Modul konfigurieren.
+        </figcaption>
+</figure>
+
+<h2 id="verkabelung-i2c">Verkabelung (I2C)<a hidden class="anchor" aria-hidden="true" href="#verkabelung-i2c">#</a></h2>
+<p>Jetzt kannst Du den BME280 Sensor anschließen. Die Verkabelung ist denkbar einfach, da wir den I2C-Bus nutzen:</p>
+<ul>
+<li><strong>VCC</strong> an 3.3V</li>
+<li><strong>GND</strong> an GND</li>
+<li><strong>SCL (SCK)</strong> an GPIO 22 (D22)</li>
+<li><strong>SDA (SDI)</strong> an GPIO 21 (D21)</li>
+</ul>
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/ESP32-BME280-wiring.jpg" width="400px"/> <figcaption>
+            So wird der BME280 mit dem ESP32 verdrahtet
+        </figcaption>
+</figure>
+
+<h2 id="die-software-esphome-code">Die Software: ESPHome Code<a hidden class="anchor" aria-hidden="true" href="#die-software-esphome-code">#</a></h2>
+<p>Hier ist die Konfiguration, die du direkt in ESPHome auf Dein frisch erkanntes ESP32-Device im ESPHome-GUI von Home Assistant einfügen kannst und &ldquo;over the air&rdquo; auf dem ESP32-Modul mit angeschlossenem BME280-Modul installieren kannst. Denke nur daran, WiFi SSID und Passwort anzuzupassen, und den Device-Namen.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">esphome</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">esphome-something</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">friendly_name</span>: <span style="color:#ae81ff">precise_temp_sensor</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">min_version</span>: <span style="color:#ae81ff">2025.9.0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name_add_mac_suffix</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">esp32</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">variant</span>: <span style="color:#ae81ff">esp32</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">framework</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">esp-idf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Enable logging</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">logger</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Enable Home Assistant API</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">api</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Allow Over-The-Air updates</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">ota</span>:
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">platform</span>: <span style="color:#ae81ff">esphome</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">wifi</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ssid</span>: <span style="color:#e6db74">&#34;secret wifi_ssid&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">password</span>: <span style="color:#e6db74">&#34;secret wifi_password&#34;</span> 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">i2c</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sda</span>: <span style="color:#ae81ff">GPIO22</span> <span style="color:#75715e"># Connected to SDA on the BME280</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">scl</span>: <span style="color:#ae81ff">GPIO21</span> <span style="color:#75715e"># Connected to SCL on the BME280</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">scan</span>: <span style="color:#66d9ef">true</span>  <span style="color:#75715e"># Scans for I2C devices on startup, helpful for debugging</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Sensor configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">sensor</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">platform</span>: <span style="color:#ae81ff">bme280_i2c</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># The I2C address is typically 0x76 or 0x77.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># If 0x76 doesn&#39;t work, try 0x77. The &#39;scan: true&#39; above will show the correct address in the logs.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">address</span>: <span style="color:#ae81ff">0x76</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">update_interval</span>: <span style="color:#ae81ff">60s</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">temperature</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;BME280 Temperature&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Optional: Add an offset if your sensor reading is slightly off</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># offset: -1.2</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">pressure</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;BME280 Pressure&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">humidity</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;BME280 Humidity&#34;</span>
+</span></span></code></pre></div><p>Nachdem Du den YAML-Code auf Dein ESP32-Board gepusht hast und alles glatt gelaufen ist, solltest Du im Home Assistant Dashboard nun unter Settings/Entites Deinen neunen Sensor finden. Einfach in der Suchzeile mal &ldquo;ESP&hellip;&rdquo; eingeben und den gefundenen Sensor einem Dasboard hinzufügen. Die Präzision dieses Setups ESP32 mit BME280 Sensor begeistert mich immer wieder:</p>
+<figure>
+    <img loading="lazy" src="http://localhost:1313/tech-blog/images/temperature_flow.jpg" width="800px"/> <figcaption>
+            Ein sehr präziser Temperaturverlauf, hier mein Außenthermometer
+        </figcaption>
+</figure>
+
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://localhost:1313/tech-blog/tags/home-assistant/">Home Assistant</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/esphome/">ESPHome</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/diy/">DIY</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/hardware/">Hardware</a></li>
+      <li><a href="http://localhost:1313/tech-blog/tags/sensoren/">Sensoren</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/tech-blog/">Pats Tech Blog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

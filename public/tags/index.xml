@@ -6,20 +6,48 @@
     <description>Recent content in Tags on Pats Tech Blog</description>
     <generator>Hugo</generator>
     <language>de-de</language>
-    <lastBuildDate>Sun, 12 Apr 2026 19:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 13 Apr 2026 17:30:00 +0200</lastBuildDate>
     <atom:link href="http://localhost:1313/tech-blog/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Bosch</title>
-      <link>http://localhost:1313/tech-blog/tags/bosch/</link>
-      <pubDate>Sun, 12 Apr 2026 19:00:00 +0200</pubDate>
-      <guid>http://localhost:1313/tech-blog/tags/bosch/</guid>
+      <title>DIY</title>
+      <link>http://localhost:1313/tech-blog/tags/diy/</link>
+      <pubDate>Mon, 13 Apr 2026 17:30:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/tags/diy/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>ESPHome</title>
+      <link>http://localhost:1313/tech-blog/tags/esphome/</link>
+      <pubDate>Mon, 13 Apr 2026 17:30:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/tags/esphome/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hardware</title>
+      <link>http://localhost:1313/tech-blog/tags/hardware/</link>
+      <pubDate>Mon, 13 Apr 2026 17:30:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/tags/hardware/</guid>
       <description></description>
     </item>
     <item>
       <title>Home Assistant</title>
       <link>http://localhost:1313/tech-blog/tags/home-assistant/</link>
-      <pubDate>Sun, 12 Apr 2026 19:00:00 +0200</pubDate>
+      <pubDate>Mon, 13 Apr 2026 17:30:00 +0200</pubDate>
       <guid>http://localhost:1313/tech-blog/tags/home-assistant/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Sensoren</title>
+      <link>http://localhost:1313/tech-blog/tags/sensoren/</link>
+      <pubDate>Mon, 13 Apr 2026 17:30:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/tags/sensoren/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Bosch</title>
+      <link>http://localhost:1313/tech-blog/tags/bosch/</link>
+      <pubDate>Sun, 12 Apr 2026 19:00:00 +0200</pubDate>
+      <guid>http://localhost:1313/tech-blog/tags/bosch/</guid>
       <description></description>
     </item>
     <item>
