@@ -34,7 +34,7 @@ Um dieses Projekt nachzubauen, brauchst du ein paar Dinge:
 ## Vorbereiten und initiales Flashen des ESP32
 
 Bevor Du den ESP32 mit dem BME280-Sensor verkabelst, solltest Du ihn zuerst mit der ESPhome-Firmware flashen.
-Das Flashen mit ESPhome Firmware ist recht einfach: Verbinde das ESP32-Board mit einem  geeigneten USB-C-Kabel mit Deinem Rechner (nicht dem Home Assistand-Computer!!). Benutze **Chrome** als Web Browser und gehe zu https://web.esphome.io/. Klicke auf "Connect":
+Das Flashen mit ESPhome Firmware ist recht einfach: Verbinde das ESP32-Board mit einem  geeigneten USB-C-Kabel mit Deinem Rechner (nicht dem Home Assistant-Computer!!). Benutze **Chrome** als Web Browser und gehe zu https://web.esphome.io/. Klicke auf "Connect":
 {{<figure src="/images/esphome_connect.jpg" width="700px" title="Computer mit ESP32 verbinden">}}
 
 Du solltest nun ein Auswahlfenster sehen, in dem Du eine USB(serielle) Verbindung auswählen kannst. Siehst Du diese Option nicht, ist Dein USB-Kabel in 95% aller Fälle nicht für dieses Projekt geeignet. Probiere ein anderes, für Datenübertragung geeigneteres Kabel aus.
