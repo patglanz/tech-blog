@@ -75,7 +75,7 @@ https://www.thingiverse.com/thing:5873177
 So habe ich das Board und den Sensor angebracht. Rot umkreist sieht man den BME280-Sensor, angebracht am Warmwasserauslass der Warmwasserwärmepumpe:
 {{<figure src="/images/pw5000_esp_bme280.jpg" width="600px" title="Der ESP-Temperatursensor">}}
 
-Mittlerweile nutze ich nur noch ESP32 Boards mit BME280-Sensoren und habe auch eine extra Anleitung am Start, wie man diese schnell und unkompliziert in Home Assistant einbinden kann: [Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro selbst bauen]({{< ref "praeziser-temperatur-feuchte-sensor-home-assistant.md" >}}) für unter 20 Euro.
+Mittlerweile nutze ich nur noch ESP32 Boards mit BME280-Sensoren und habe auch eine extra Anleitung am Start, wie man diese schnell und unkompliziert in Home Assistant einbinden kann: [Einen präzisen Temperatur- und Feuchtesensor für Home Assistant unter 20 Euro selbst bauen]({{< ref "/posts/praeziser-temperatur-feuchte-sensor-home-assistant.md" >}})
 
 Der Sensor am Auslass der Wärmepumpe kann natürlich nicht die tatsächliche Wassertemperatur im Wasserspeicher messen, aber man kann sehr gut Zapf-und Aufheizvorgänge in Homeassistant sehen:
 
