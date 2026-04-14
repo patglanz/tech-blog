@@ -111,4 +111,4 @@ sensor:
 
 Nachdem Du den YAML-Code auf Dein ESP32-Board gepusht hast und alles glatt gelaufen ist, solltest Du im Home Assistant Dashboard nun unter Settings/Entites Deinen neunen Sensor finden. Einfach in der Suchzeile mal "ESP..." eingeben und den gefundenen Sensor einem Dasboard hinzufügen. Die Präzision dieses Setups ESP32 mit BME280 Sensor begeistert mich immer wieder:
 
-{{<figure src="/images/temperature_flow.jpg" width="800px" title="Ein sehr präziser Temperaturverlauf, hier mein Außenthermometer">}}
+{{<figure src="/images/temperature_flow.jpg" width="800px" title="Eine sehr präzise Temperaturkurve über zwei Tage, hier von meinem Außenthermometer">}}
