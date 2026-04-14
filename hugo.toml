@@ -23,6 +23,10 @@ imageCover = true
 imageTitle = "Vom Graben zum Smart Home"
 
 [[params.profileMode.buttons]]
+name = "Featured: Temperatursensor mit ESP32 bauen"
+url = "posts/praeziser-temperatur-feuchte-sensor-home-assistant"
+
+[[params.profileMode.buttons]]
 name = "Zum Wasserzähler-Projekt"
 url = "posts/wasserzaehler-home-assistant"
 
