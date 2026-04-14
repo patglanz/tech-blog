@@ -23,7 +23,7 @@ Selbstredend solltest Home Assistant am Start haben. Falls Du es noch nicht geta
 
 ## Die Hardware-Liste
 Um dieses Projekt nachzubauen, brauchst du ein paar Dinge:
-* **ESP32 Dev Board** (ca. 5-7 €).
+* **ESP32 (NodeMCU) Dev Board** (ca. 5-7 €).
 * **BME280 Sensor Modul** (hohe Präzision, ca. 3-7 €).
 * **Jumper Wire Kabel** (Bei der Firma Amazing oder auf der Bucht Nach "Dupont-Kabel" suchen, weiblich-weiblich).
 * **USB (C)-Netzteil**, idealerweise mehr als 1A.
