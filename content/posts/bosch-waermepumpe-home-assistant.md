@@ -1,5 +1,5 @@
 ---
-title: "Bosch Brauchwasserwärmepumpe Compress 5000 DW in Home Assistant einbinden"
+title: "Bosch Brauchwasserwärmepumpe Compress 5000 DW (CS5001) in Home Assistant einbinden"
 date: 2026-04-12T19:00:00+02:00
 draft: false # Solange das auf "true" steht, geht es nicht online!
 tags: ["Home Assistant", "Bosch", "Wärmepumpe", "Smarthome"]
