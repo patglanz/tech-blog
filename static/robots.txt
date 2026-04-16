@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://patglanz.github.io/tech-blog/sitemap.xml
+
